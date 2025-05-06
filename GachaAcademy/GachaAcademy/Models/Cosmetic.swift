@@ -8,8 +8,9 @@
 import Foundation
 import SwiftUI
 
-struct Cosmetic
+struct Cosmetic : Identifiable
 {
+    let id = UUID();
     let name : String;
     let rarity : Rarity;
     let sprite : UIImage;
