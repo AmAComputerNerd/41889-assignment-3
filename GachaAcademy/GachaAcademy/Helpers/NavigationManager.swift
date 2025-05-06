@@ -2,7 +2,7 @@
 //  NavigationManager.swift
 //  Use with EnvironmentObject to easily navigate around the application programmatically.
 //  Views without constructors / needed information can be instantiated by passing in the class of the view (ClassName.self).
-//  Views with constructors can be instantiated using a closure, e.g. { SomeView(info: "Yes") }
+//  Views with constructors can be instantiated using a closure, e.g. { AnyView(ViewName(info: "Yes")) }
 //  GachaAcademy
 //
 //  Created by Jonathon Thomson on 5/5/2025.
@@ -13,13 +13,15 @@ import SwiftUI
 
 class NavigationManager: ObservableObject {
     // TODO: CHANGE THE FOLLOWING LINE TO REFERENCE HOMEVIEW WHEN IT IS CREATED!!
-    @Published var currentView: AnyView = AnyView(ContentView()); // The instance to the View in which the nav manager is pointing to.
-    @Published var supportsNavigation: Bool = true; // Whether this View should use a NavigationView UI element to handle in-view navigation (shows a back button in the top left). From there, NavigationLinks will handle that kind of navigation and the NavigationManager is used to reset or change the navigation stack to a View outside of that tree.
+    @Published var currentView: AnyView = AnyView(ProfileView()); // The instance to the View in which the nav manager is pointing to.
+    @Published var supportsNavigation: Bool = false; // Whether this View should use a NavigationView UI element to handle in-view navigation (shows a back button in the top left). From there, NavigationLinks will handle that kind of navigation and the NavigationManager is used to reset or change the navigation stack to a View outside of that tree.
     
     // ViewFactories for views with a default constructor.
     // When making a new View you need to navigate to that DOESN'T need some kind of info passed to it, add it below:
     private let viewFactories: [String: () -> AnyView] = [
-        ReflectionHelper.getClassNameFromType(ContentView.self): { AnyView(ContentView()) }
+        ReflectionHelper.getClassNameFromType(ContentView.self): { AnyView(ContentView()) },
+        ReflectionHelper.getClassNameFromType(GachaView.self): { AnyView(GachaView()) },
+        ReflectionHelper.getClassNameFromType(ProfileView.self): { AnyView(ProfileView()) }
     ];
     
     func navigate(to: Any.Type? = nil, withParams: (() -> AnyView)? = nil, supportsNavigation: Bool = false) {
