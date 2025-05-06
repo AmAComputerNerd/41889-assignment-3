@@ -7,18 +7,26 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
-struct Cosmetic : Identifiable
+@Model
+class Cosmetic : Identifiable
 {
-    let id = UUID();
-    let name : String;
-    let rarity : Rarity;
-    let sprite : UIImage;
+    var id = UUID();
+    var name : String;
+    var rarityData : String;
+    var rarity : Rarity {
+        Rarity(rawValue: rarityData)!;
+    }
+    var spriteData : Data;
+    var sprite: UIImage? {
+        UIImage(data: spriteData)
+    }
     
     init(itemName : String, itemRarity : Rarity, itemImage : UIImage)
     {
         name = itemName;
-        rarity = itemRarity;
-        sprite = itemImage;
+        rarityData = itemRarity.rawValue;
+        spriteData = itemImage.pngData() ?? Data();
     }
 }
