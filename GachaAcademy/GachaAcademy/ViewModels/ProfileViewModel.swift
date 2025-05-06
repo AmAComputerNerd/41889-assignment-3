@@ -6,29 +6,22 @@
 //
 
 import Foundation
+import SwiftData
 
 class ProfileViewModel: ObservableObject {
     @Published var user: User? = nil;
     @Published var availableCosmetics: [Cosmetic] = [];
+    private var dataHelper: DataHelper? = nil;
     
-    func refresh() async {
+    func refresh(modelContext: ModelContext) {
         // TODO: Data refresh for User and cosmetics. Do we need a cosmetics manager?
         // Open question: Where do we store the user and cosmetics?
-        self.user = await retrieveUser();
-        self.availableCosmetics = await retrieveCosmetics();
-    }
-    
-    private func retrieveUser() async -> User? {
-        // TODO: This
-        return nil;
-    }
-    
-    private func retrieveCosmetics() async -> [Cosmetic] {
-        // TODO: This
-        return [];
-    }
-    
-    private func saveUser() async {
-        // TODO: This
+        if let dataHelper = dataHelper {
+            dataHelper.refreshContext(modelContext: modelContext);
+        } else {
+            self.dataHelper = DataHelper(modelContext: modelContext);
+        }
+        self.user = self.dataHelper?.fetchUser();
+        self.availableCosmetics = self.dataHelper?.fetchAllCosmetics() ?? [];
     }
 }
