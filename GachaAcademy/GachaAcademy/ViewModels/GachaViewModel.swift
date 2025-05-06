@@ -11,29 +11,49 @@ import SwiftUI
 class GachaViewModel : ObservableObject
 {
     @AppStorage("Pity") var pityCount : Int = 0;
+    @AppStorage("5StarRate") var current5StarRate : Double = 0.006;
+    @Published var lastPulledItems : [Cosmetic] = [];
     
     init()
     {
         pityCount = UserDefaults.standard.integer(forKey: "Pity");
+        current5StarRate = UserDefaults.standard.double(forKey: "5StarRate");
     }
     
-    func singlePull() -> Cosmetic
+    func singlePull()
+    {
+        lastPulledItems = [];
+        pullItem();
+    }
+    
+    func tenPull()
+    {
+        lastPulledItems = [];
+        for _ in 1...10 {
+            pullItem();
+        }
+    }
+    
+    func pullItem()
     {
         let newCosmeticRarity = getItemRarity();
         let newCosmeticName = getItemName(rarity: newCosmeticRarity);
         let newCosmeticImage = getAssetFromName(name: newCosmeticName);
-        return Cosmetic(itemName: newCosmeticName, itemRarity: newCosmeticRarity, itemImage: newCosmeticImage);
+        incrementPityCountAndRate();
+        lastPulledItems.append(Cosmetic(itemName: newCosmeticName, itemRarity: newCosmeticRarity, itemImage: newCosmeticImage));
     }
     
     func getItemRarity() -> Rarity
     {
         let rarity : Rarity;
-        let selection = Int.random(in: 1...1000);
-        if selection <= 60 // 5 star rate of 0.6%
+        let selection = Double.random(in: 0.001...1);
+        if selection <= 1 * current5StarRate // 5 star rate of 0.6%
         {
             rarity = .Legendary;
+            pityCount = 0;
+            current5StarRate = 0.006;
         }
-        else if selection > 60 && selection <= 111 // 4 star rate of 5.1%
+        else if selection >= 0.949 && selection <= 1 // 4 star rate of 5.1%
         {
             rarity = .Epic;
         }
@@ -41,33 +61,46 @@ class GachaViewModel : ObservableObject
         {
             rarity = .Common;
         }
-        pityCount += 1;
         return rarity;
     }
     
     func getItemName(rarity : Rarity) -> String
     {
-        let itemName : String;
         switch rarity
         {
             case .Common:
-                let selection = Int.random(in: 0...10) // 10 is example number of 3 star items we add
-                // get the selected item from the common items enum
-                itemName = "unluggy";
+                let selection = Int.random(in: 1...ThreeStars.allCases.count)
+                if let itemName = ThreeStars(rawValue: selection)
+                {
+                    return "3 Star - \(itemName)";
+                }
             case .Epic:
-                let selection = Int.random(in: 0...5) // 5 is example number of 4 star items we add
-                // get the selected item from the epic items enum
-                itemName = "arlan :)";
+                let selection = Int.random(in: 1...FourStars.allCases.count)
+                if let itemName = FourStars(rawValue: selection)
+                {
+                    return "4 Star - \(itemName)";
+                }
             case .Legendary:
-                let selection = Int.random(in: 0...3) // 3 is example number of 5 star items we add
-                // get the selected item from the legendary items enum
-                itemName = "Yanqing :(";
+                let selection = Int.random(in: 1...FiveStars.allCases.count)
+                if let itemName = FiveStars(rawValue: selection)
+                {
+                    return "5 Star - \(itemName)";
+                }
         }
-        return itemName;
+        return "No item found";
     }
     
     func getAssetFromName(name: String) -> UIImage
     {
         return UIImage(); // later problem
+    }
+    
+    func incrementPityCountAndRate()
+    {
+        pityCount += 1;
+        if (pityCount > 74)
+        {
+            current5StarRate += (1.0 - current5StarRate) / (90.0 - Double(pityCount));
+        }
     }
 }
