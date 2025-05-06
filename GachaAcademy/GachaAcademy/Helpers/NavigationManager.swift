@@ -13,7 +13,7 @@ import SwiftUI
 
 class NavigationManager: ObservableObject {
     // TODO: CHANGE THE FOLLOWING LINE TO REFERENCE HOMEVIEW WHEN IT IS CREATED!!
-    @Published var currentView: AnyView = AnyView(ProfileView()); // The instance to the View in which the nav manager is pointing to.
+    @Published var currentView: AnyView = AnyView(GachaView()); // The instance to the View in which the nav manager is pointing to.
     @Published var supportsNavigation: Bool = false; // Whether this View should use a NavigationView UI element to handle in-view navigation (shows a back button in the top left). From there, NavigationLinks will handle that kind of navigation and the NavigationManager is used to reset or change the navigation stack to a View outside of that tree.
     
     // ViewFactories for views with a default constructor.
