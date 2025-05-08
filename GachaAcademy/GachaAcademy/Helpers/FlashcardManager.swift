@@ -4,7 +4,7 @@ public class FlashcardManager {
     static let baseUrl = "http://dolphinflashcards.com/api/"
     static let getAllCardsEndpoint = "get-all-cards"
 
-    public static func getAllCardInfo(jwt: String) async throws -> [Folder] {
+    public static func retrieveAllCardInfo(jwt: String) async throws -> [FolderDTO] {
         guard let url = URL(string: baseUrl + getAllCardsEndpoint) else {
             throw ApiRequestError.invalidURL
         }
@@ -22,8 +22,8 @@ public class FlashcardManager {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
-            let (data, _) = await URLSession.shared.data(for: request)
-            let folders = JsonParser.parseFolders(data: data)
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let folders = try JsonParser.parseFolders(data: data)
             return folders
         } catch {
             throw ApiRequestError.failedToRetrieveAllCards(message: error.localizedDescription)
