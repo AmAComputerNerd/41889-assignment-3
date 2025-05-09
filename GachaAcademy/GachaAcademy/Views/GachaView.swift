@@ -61,6 +61,19 @@ struct GachaView : View {
                     .foregroundColor(.white)
                     .clipShape(RoundedRectangle(cornerRadius:  5))
                     .padding()
+                    
+                    Button(action: {
+                        Task {
+                            do {
+                                _ = try await FlashcardManager.retrieveAllCardInfo(jwt: "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImEzMmZkZDRiMTQ2Njc3NzE5YWIyMzcyODYxYmRlZDg5In0.eyJpc3MiOiJodHRwOi8vZG9scGhpbmZsYXNoY2FyZHMuY29tIiwiYXVkIjoiYXBpIiwic3ViIjoiVmRVNE5pdG5RS1RUaVRQM3FZSXNydlVrVG1VMiIsImFjY2Vzc190b2tlbiI6IjRiZTA2NDNmLTFkOTgtNTczYi05N2NkLWNhOThhNjUzNDdkZCIsImFjY2Vzc190b2tlbl9yYXciOiJ0ZXN0IiwiaWF0IjoxNzQ2MzgyMTc5fQ.TwBdfETmWrEkMukJ3AXcuQa4bDp8i2efLsyiYGczGkY80KitTeFk5DSzYnlvmNwtXZjJoCrHNzFrEVid4TdGqA");
+                            }
+                            catch {
+                                //do nothin
+                            }
+                        }
+                        }) {
+                            Text("Test")
+                        }
                 }
                 .position(x:geometry.size.width/2, y:geometry.size.height * 0.9)
             }
@@ -81,4 +94,6 @@ struct GachaView : View {
 
 #Preview {
     GachaView()
+        .environmentObject(NavigationManager())
+        .modelContainer(for: [User.self, Cosmetic.self, FlashcardSet.self, Flashcard.self])
 }
