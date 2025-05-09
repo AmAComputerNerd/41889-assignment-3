@@ -14,9 +14,10 @@ class FlashcardSet: Identifiable {
     // Temporary model code for BTS23 - Profile page basic mvvm structure
     var id: UUID = UUID();
     var name: String;
-    @Relationship var flashcards: [Flashcard] = [];
+    @Relationship var flashcards: [Flashcard];
     
-    init(name: String) {
+    init(name: String, flashcards: [Flashcard] = []) {
         self.name = name;
+        self.flashcards = flashcards;
     }
 }

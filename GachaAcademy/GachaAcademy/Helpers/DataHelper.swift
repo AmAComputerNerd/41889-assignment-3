@@ -53,6 +53,17 @@ class DataHelper: ObservableObject {
         return self.saveChanges();
     }
     
+    func updateFlashcards() async -> Bool {
+        guard let existingUser = self.fetchUser() else { return false; }
+        
+        do {
+            existingUser.flashcards = try await FlashcardManager.getAllFlashcards(jwt: existingUser.apiKey);
+        }
+        catch {
+            return false;
+        }
+    }
+    
     func fetchAllCosmetics(predicate: Predicate<Cosmetic> = .true, sortDescriptors: [SortDescriptor<Cosmetic>] = []) -> [Cosmetic] {
         do {
             let descriptor = FetchDescriptor<Cosmetic>(predicate: predicate, sortBy: sortDescriptors);
@@ -69,25 +80,6 @@ class DataHelper: ObservableObject {
     
     func removeCosmetic(cosmetic: Cosmetic) -> Bool {
         self.modelContext.delete(cosmetic);
-        return self.saveChanges();
-    }
-    
-    func fetchAllFlashcardSets(predicate: Predicate<FlashcardSet> = .true, sortDescriptors: [SortDescriptor<FlashcardSet>] = []) -> [FlashcardSet] {
-        do {
-            let descriptor = FetchDescriptor<FlashcardSet>(predicate: predicate, sortBy: sortDescriptors);
-            return try self.modelContext.fetch(descriptor);
-        } catch {
-            return [];
-        }
-    }
-    
-    func addFlashcardSet(flashcardSet: FlashcardSet) -> Bool {
-        self.modelContext.insert(flashcardSet);
-        return self.saveChanges();
-    }
-    
-    func removeFlashcardSet(flashcardSet: FlashcardSet) -> Bool {
-        self.modelContext.delete(flashcardSet);
         return self.saveChanges();
     }
     

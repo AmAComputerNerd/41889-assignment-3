@@ -1,37 +1,82 @@
 import Foundation
 
-public class FlashcardManager {
-    static let baseUrl = "http://dolphinflashcards.com/api/"
-    static let getAllCardsEndpoint = "get-all-cards"
+class FlashcardManager {
+    static let getAllFlashcardsEndpoint = "get-all-cards"
+    static let getFlashcardEndpoint = "get-flashcard-item"
+    
+    static func getAllFlashcards(jwt: String) async throws -> FlashcardFolder {
+        let allFlashcardInfo = try await retrieveAllFlashcardInfo(jwt: jwt);
+        return try await getFlashcardsFromDTOs(folderDTOs: allFlashcardInfo);
+    }
 
-    public static func retrieveAllCardInfo(jwt: String) async throws -> [FolderDTO] {
-        guard let url = URL(string: baseUrl + getAllCardsEndpoint) else {
-            throw ApiRequestError.invalidURL
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-
-        let body = ["jwtToken": jwt]
+    static func retrieveAllFlashcardInfo(jwt: String) async throws -> [FolderDTO] {
+        let (data, response): (Data, HTTPURLResponse);
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-        } catch {
-            throw ApiRequestError.failedToRetrieveAllCards(message: "Error encoding request body")
+            (data, response) = try await HTTPRequestHelper.makePostRequest(endpoint: getAllFlashcardsEndpoint, body: ["jwtToken": jwt]);
+        } catch{
+            throw FlashcardManagerError.unableToRetrieveAllFlashcardInfo(message: error.localizedDescription)
         }
-
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if (response.statusCode % 100 != 2) {
+            throw FlashcardManagerError.unableToRetrieveAllFlashcardInfo(message: "API response is not successful")
+        }
         
         do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let folders = try JsonParser.parseFolders(data: data)
-            return folders
-        } catch {
-            throw ApiRequestError.failedToRetrieveAllCards(message: error.localizedDescription)
+            return try JsonParser.parseFolders(data: data);
         }
+        catch {
+            throw FlashcardManagerError.unableToRetrieveAllFlashcardInfo(message: "Retrieved data is invalid");
+        }
+    }
+    
+    static func retrieveFlashcard(cardID: String) async throws -> FlashcardDTO {
+        let (data, response): (Data, HTTPURLResponse);
+        do {
+            (data, response) = try await HTTPRequestHelper.makePostRequest(endpoint: getFlashcardEndpoint, body: ["cardID": cardID]);
+        } catch{
+            throw FlashcardManagerError.unableToRetrieveFlashcard(message: "Card ID: \(cardID), Error: \(error.localizedDescription)");
+        }
+        
+        if (response.statusCode % 100 != 2) {
+            throw FlashcardManagerError.unableToRetrieveFlashcard(message: "API response is not successful");
+        }
+        
+        do {
+            return try JSONDecoder().decode(FlashcardDTO.self, from: data);
+        }
+        catch {
+            throw FlashcardManagerError.unableToRetrieveFlashcard(message: "Retrieved data is invalid");
+        }
+    }
+    
+    static func flashcardInfoDtoToFlashcard(flashcardInfoDTO: FlashcardInfoDTO) async throws -> Flashcard {
+        var flashcardDTO = try await retrieveFlashcard(cardID: flashcardInfoDTO.cardID);
+        return Flashcard(front: flashcardDTO.front, back: flashcardDTO.back);
+    }
+    
+    static func getFlashcardsFromDTOs(folderDTOs: [FolderDTO], folderName: String? = nil) async throws -> FlashcardFolder {
+        var flashcardFolder = FlashcardFolder(name: folderName);
+        
+        for folderDTO in folderDTOs {
+            if (folderDTO.flashcards.count > 0) {
+                var flashcardSet = FlashcardSet(name: folderDTO.name)
+                for flashcardInfoDTO in folderDTO.flashcards {
+                    flashcardSet.flashcards.append(try await flashcardInfoDtoToFlashcard(flashcardInfoDTO: flashcardInfoDTO));
+                }
+                
+                flashcardFolder.flashcardSets.append(flashcardSet);
+            }
+            
+            if (folderDTO.subfolders.count > 0) {
+                flashcardFolder.subFolders.append(try await getFlashcardsFromDTOs(folderDTOs: folderDTO.subfolders, folderName: folderDTO.name));
+            }
+        }
+        
+        return flashcardFolder
     }
 }
 
-public enum ApiRequestError: Error {
-    case failedToRetrieveAllCards(message: String)
-    case invalidURL
+enum FlashcardManagerError: Error {
+    case unableToRetrieveAllFlashcardInfo(message: String)
+    case unableToRetrieveFlashcard(message: String)
 }

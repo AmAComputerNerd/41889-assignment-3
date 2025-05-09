@@ -1,7 +1,7 @@
-public class FolderDTO {
+class FolderDTO {
     let name: String
     var flashcardID: String?
-    var cards: [FlashcardInfoDTO] = []
+    var flashcards: [FlashcardInfoDTO] = []
     var subfolders: [FolderDTO] = []
 
     init(name: String) {
