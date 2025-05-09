@@ -10,6 +10,7 @@ import SwiftUI
 
 class GachaViewModel : ObservableObject
 {
+    // TODO: Add pulled cosmetics to the list of Cosmetics with DataHelper. These will be used as the player's "available" cosmetics which determines which ones they can apply.
     @AppStorage("Pity") var pityCount : Int = 0;
     @AppStorage("5StarRate") var current5StarRate : Double = 0.006;
     @Published var lastPulledItems : [Cosmetic] = [];
@@ -37,10 +38,18 @@ class GachaViewModel : ObservableObject
     func pullItem()
     {
         let newCosmeticRarity = getItemRarity();
-        let newCosmeticName = getItemName(rarity: newCosmeticRarity);
-        let newCosmeticImage = getAssetFromName(name: newCosmeticName);
         incrementPityCountAndRate();
-        lastPulledItems.append(Cosmetic(itemName: newCosmeticName, itemRarity: newCosmeticRarity, itemImage: newCosmeticImage));
+        switch newCosmeticRarity {
+            case .Common:
+                lastPulledItems.append(CosmeticFactory.createRandomThreeStar());
+                break;
+            case .Epic:
+                lastPulledItems.append(CosmeticFactory.createRandomFourStar());
+                break;
+            case .Legendary:
+                lastPulledItems.append(CosmeticFactory.createRandomFiveStar());
+                break;
+        }
     }
     
     func getItemRarity() -> Rarity
@@ -62,37 +71,6 @@ class GachaViewModel : ObservableObject
             rarity = .Common;
         }
         return rarity;
-    }
-    
-    func getItemName(rarity : Rarity) -> String
-    {
-        switch rarity
-        {
-            case .Common:
-                let selection = Int.random(in: 1...ThreeStars.allCases.count)
-                if let itemName = ThreeStars(rawValue: selection)
-                {
-                    return "3 Star - \(itemName)";
-                }
-            case .Epic:
-                let selection = Int.random(in: 1...FourStars.allCases.count)
-                if let itemName = FourStars(rawValue: selection)
-                {
-                    return "4 Star - \(itemName)";
-                }
-            case .Legendary:
-                let selection = Int.random(in: 1...FiveStars.allCases.count)
-                if let itemName = FiveStars(rawValue: selection)
-                {
-                    return "5 Star - \(itemName)";
-                }
-        }
-        return "No item found";
-    }
-    
-    func getAssetFromName(name: String) -> UIImage
-    {
-        return UIImage(); // later problem
     }
     
     func incrementPityCountAndRate()
