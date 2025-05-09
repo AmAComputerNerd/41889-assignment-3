@@ -21,8 +21,6 @@ class GachaViewModel : ObservableObject
     @Published var user: User? = nil;
     
     func refresh(modelContext: ModelContext) {
-        // TODO: Data refresh for User and cosmetics. Do we need a cosmetics manager?
-        // Open question: Where do we store the user and cosmetics?
         if let dataHelper = dataHelper {
             dataHelper.refreshContext(modelContext: modelContext);
         } else {
@@ -74,6 +72,7 @@ class GachaViewModel : ObservableObject
                 lastPulledItems.append(CosmeticFactory.createRandomFiveStar());
                 break;
         }
+        _ = dataHelper?.addCosmetic(cosmetic: lastPulledItems.last!);
         _ = dataHelper?.updateUser(name: user?.name, apiKey: user?.apiKey, avatarURL: user?.avatarURL, ticketCount: user!.ticketCount - 1)
     }
     
