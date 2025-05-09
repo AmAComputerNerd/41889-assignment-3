@@ -26,6 +26,15 @@ class DataHelper: ObservableObject {
         return try? self.modelContext.fetch(descriptor).first;
     }
     
+    func createUserIfNotExists(user: User) -> Bool {
+        guard fetchUser() == nil else {
+            // Can only be one user - it already exists.
+            return false;
+        }
+        self.modelContext.insert(user);
+        return self.saveChanges();
+    }
+    
     func updateUser(name: String?, apiKey: String?, avatarURL: URL?) -> Bool {
         guard let existingUser = self.fetchUser() else { return false; }
         
@@ -33,6 +42,13 @@ class DataHelper: ObservableObject {
         if let apiKey = apiKey { existingUser.apiKey = apiKey }
         if let avatarURL = avatarURL { existingUser.avatarURL = avatarURL }
         
+        return self.saveChanges();
+    }
+    
+    func clearUser() -> Bool {
+        guard let existingUser = self.fetchUser() else { return false; }
+        
+        self.modelContext.delete(existingUser);
         return self.saveChanges();
     }
     

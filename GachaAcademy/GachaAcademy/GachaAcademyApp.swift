@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct GachaAcademyApp: App {
-    let navigationManager = NavigationManager();
+    @StateObject var navigationManager: NavigationManager = NavigationManager();
 
     var body: some Scene {
         WindowGroup {
