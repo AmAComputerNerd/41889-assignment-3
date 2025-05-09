@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct GachaView : View {
+    @Environment(\.modelContext) private var modelContext;
     @StateObject var viewModel: GachaViewModel = GachaViewModel();
     
     var body: some View {
@@ -77,6 +78,9 @@ struct GachaView : View {
                 }
                 .position(x:geometry.size.width/2, y:geometry.size.height * 0.9)
             }
+        }
+        .onAppear() {
+            viewModel.refresh(modelContext: modelContext)
         }
     }
     

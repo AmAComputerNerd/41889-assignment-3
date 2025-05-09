@@ -25,7 +25,7 @@ struct HomeView: View {
                 .padding()
             HStack {
                 Button("Gacha") {
-                  navigationManager.navigate(to: GachaView.self)
+                    navigationManager.navigate(to: GachaView.self)
                 }
                 .buttonStyle(.borderedProminent)
                 StyledNavigationLink(destination: ProfileView(), label: "Profile")
