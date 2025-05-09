@@ -1,7 +1,7 @@
 import Foundation
 
-public class JsonParser {
-    public static func parseFolders(data: Data) throws -> [FolderDTO] {
+class JsonParser {
+    static func parseFolders(data: Data) throws -> [FolderDTO] {
         let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
         return json?.compactMap { parseFolder(name: $0.key, content: $0.value as? [String: Any]) } ?? []
     }
@@ -16,7 +16,7 @@ public class JsonParser {
         }
     
         if let cardsDict = content["cards"] as? [String: [String: Any]] {
-            folder.cards = cardsDict.compactMap { cardID, info in
+            folder.flashcards = cardsDict.compactMap { cardID, info in
                 guard let lastReview = info["last_review"] as? String,
                       let reviewStatus = info["review_status"] as? String
                 else {
