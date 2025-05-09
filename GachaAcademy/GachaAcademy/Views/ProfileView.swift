@@ -32,4 +32,6 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
+        .environmentObject(NavigationManager())
+        .modelContainer(for: [User.self, Cosmetic.self, FlashcardSet.self, Flashcard.self])
 }
