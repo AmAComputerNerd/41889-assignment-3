@@ -25,7 +25,7 @@ struct HomeView: View {
                 .padding()
             HStack {
                 StyledNavigationLink(destination: GachaView(), label: "Gacha")
-                //StyledNavigationLink(destination: ProfileView(), label: "Profile")
+                StyledNavigationLink(destination: ProfileView(), label: "Profile")
                 Button("Profile") {
                     navigationManager.navigate(to: ProfileView.self)
                 }
