@@ -14,6 +14,7 @@ class User: Identifiable {
     var name: String;
     var apiKey: String;
     var avatarURL: URL?;
+    var ticketCount: Int = 0;
     @Relationship var starredCollections: [FlashcardSet] = [];
     @Relationship var recentCollections: [FlashcardSet] = [];
     @Relationship var appliedCosmetics: [Cosmetic] = [];

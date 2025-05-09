@@ -35,12 +35,13 @@ class DataHelper: ObservableObject {
         return self.saveChanges();
     }
     
-    func updateUser(name: String?, apiKey: String?, avatarURL: URL?) -> Bool {
+    func updateUser(name: String?, apiKey: String?, avatarURL: URL?, ticketCount: Int?) -> Bool {
         guard let existingUser = self.fetchUser() else { return false; }
         
         if let name = name { existingUser.name = name }
         if let apiKey = apiKey { existingUser.apiKey = apiKey }
         if let avatarURL = avatarURL { existingUser.avatarURL = avatarURL }
+        if let ticketCount = ticketCount { existingUser.ticketCount = ticketCount }
         
         return self.saveChanges();
     }
