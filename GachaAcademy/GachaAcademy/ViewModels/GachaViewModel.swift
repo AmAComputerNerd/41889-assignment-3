@@ -134,4 +134,9 @@ class GachaViewModel : ObservableObject
             current5StarRate += (1.0 - current5StarRate) / (90.0 - Double(pityCount));
         }
     }
+    
+    func giveTicket()
+    {
+        _ = dataHelper?.updateUser(name: user?.name, apiKey: user?.apiKey, avatarURL: user?.avatarURL, ticketCount: user!.ticketCount + 1)
+    }
 }
