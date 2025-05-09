@@ -19,7 +19,7 @@ struct GachaAcademyApp: App {
                 .modelContainer(for: [User.self, Cosmetic.self, FlashcardSet.self, Flashcard.self])
             
             if navigationManager.supportsNavigation {
-                NavigationView() {
+                NavigationStack() {
                     view
                 }
             } else {

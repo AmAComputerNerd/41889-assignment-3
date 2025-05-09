@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext;
+    @EnvironmentObject private var navigationManager: NavigationManager;
     @StateObject var viewModel: ProfileViewModel = ProfileViewModel();
     
     var body: some View {
@@ -23,6 +24,9 @@ struct ProfileView: View {
                 .padding()
             Text("API Key: \(viewModel.user?.apiKey ?? "Not set")");
             Text("Available cosmetics: \(viewModel.availableCosmetics.count)")
+            Button("Test") {
+                navigationManager.navigate(to: HomeView.self);
+            }
         }
         .onAppear() {
             viewModel.refresh(modelContext: modelContext)
