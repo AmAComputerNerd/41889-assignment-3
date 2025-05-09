@@ -14,6 +14,10 @@ class Cosmetic : Identifiable
 {
     var id = UUID();
     var name : String;
+    var typeData: String;
+    var type : CosmeticType {
+        CosmeticType(rawValue: typeData)!;
+    }
     var rarityData : String;
     var rarity : Rarity {
         Rarity(rawValue: rarityData)!;
@@ -23,10 +27,11 @@ class Cosmetic : Identifiable
         UIImage(data: spriteData)
     }
     
-    init(itemName : String, itemRarity : Rarity, itemImage : UIImage)
+    init(_ name : String, _ type: CosmeticType, _ rarity : Rarity, _ image : UIImage?)
     {
-        name = itemName;
-        rarityData = itemRarity.rawValue;
-        spriteData = itemImage.pngData() ?? Data();
+        self.name = name;
+        self.typeData = type.rawValue;
+        self.rarityData = rarity.rawValue;
+        self.spriteData = image?.pngData() ?? Data();
     }
 }

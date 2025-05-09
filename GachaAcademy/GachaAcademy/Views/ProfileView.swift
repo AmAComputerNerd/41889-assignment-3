@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext;
+    @EnvironmentObject private var navigationManager: NavigationManager;
     @StateObject var viewModel: ProfileViewModel = ProfileViewModel();
     
     var body: some View {
         VStack {
-            Text("This is a basic View page.")
             Circle()
                 .fill(Color.gray)
                 .frame(width: 150, height: 150)

@@ -11,6 +11,7 @@ import SwiftData
 
 class GachaViewModel : ObservableObject
 {
+    // TODO: Add pulled cosmetics to the list of Cosmetics with DataHelper. These will be used as the player's "available" cosmetics which determines which ones they can apply.
     @AppStorage("Pity") var pityCount : Int = 0;
     @AppStorage("5StarRate") var current5StarRate : Double = 0.006;
     @AppStorage("5StarRate") var current4StarRate : Double = 0.051;
@@ -20,8 +21,6 @@ class GachaViewModel : ObservableObject
     @Published var user: User? = nil;
     
     func refresh(modelContext: ModelContext) {
-        // TODO: Data refresh for User and cosmetics. Do we need a cosmetics manager?
-        // Open question: Where do we store the user and cosmetics?
         if let dataHelper = dataHelper {
             dataHelper.refreshContext(modelContext: modelContext);
         } else {
@@ -61,10 +60,19 @@ class GachaViewModel : ObservableObject
     func pullItem()
     {
         let newCosmeticRarity = getItemRarity();
-        let newCosmeticName = getItemName(rarity: newCosmeticRarity);
-        let newCosmeticImage = getAssetFromName(name: newCosmeticName);
         incrementPityCountAndRate();
-        lastPulledItems.append(Cosmetic(itemName: newCosmeticName, itemRarity: newCosmeticRarity, itemImage: newCosmeticImage));
+        switch newCosmeticRarity {
+            case .Common:
+                lastPulledItems.append(CosmeticFactory.createRandomThreeStar());
+                break;
+            case .Epic:
+                lastPulledItems.append(CosmeticFactory.createRandomFourStar());
+                break;
+            case .Legendary:
+                lastPulledItems.append(CosmeticFactory.createRandomFiveStar());
+                break;
+        }
+        _ = dataHelper?.addCosmetic(cosmetic: lastPulledItems.last!);
         _ = dataHelper?.updateUser(name: user?.name, apiKey: user?.apiKey, avatarURL: user?.avatarURL, ticketCount: user!.ticketCount - 1)
     }
     
@@ -89,37 +97,6 @@ class GachaViewModel : ObservableObject
             rarity = .Common;
         }
         return rarity;
-    }
-    
-    func getItemName(rarity : Rarity) -> String
-    {
-        switch rarity
-        {
-            case .Common:
-                let selection = Int.random(in: 1...ThreeStars.allCases.count)
-                if let itemName = ThreeStars(rawValue: selection)
-                {
-                    return "3 Star - \(itemName)";
-                }
-            case .Epic:
-                let selection = Int.random(in: 1...FourStars.allCases.count)
-                if let itemName = FourStars(rawValue: selection)
-                {
-                    return "4 Star - \(itemName)";
-                }
-            case .Legendary:
-                let selection = Int.random(in: 1...FiveStars.allCases.count)
-                if let itemName = FiveStars(rawValue: selection)
-                {
-                    return "5 Star - \(itemName)";
-                }
-        }
-        return "No item found";
-    }
-    
-    func getAssetFromName(name: String) -> UIImage
-    {
-        return UIImage(); // later problem
     }
     
     func incrementPityCountAndRate()

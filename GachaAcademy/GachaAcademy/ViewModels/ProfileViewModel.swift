@@ -14,14 +14,12 @@ class ProfileViewModel: ObservableObject {
     private var dataHelper: DataHelper? = nil;
     
     func refresh(modelContext: ModelContext) {
-        // TODO: Data refresh for User and cosmetics. Do we need a cosmetics manager?
-        // Open question: Where do we store the user and cosmetics?
         if let dataHelper = dataHelper {
             dataHelper.refreshContext(modelContext: modelContext);
         } else {
             self.dataHelper = DataHelper(modelContext: modelContext);
         }
-        self.user = self.dataHelper?.fetchUser();
-        self.availableCosmetics = self.dataHelper?.fetchAllCosmetics() ?? [];
+        self.user = self.dataHelper!.fetchUser();
+        self.availableCosmetics = self.dataHelper!.fetchAllCosmetics();
     }
 }

@@ -29,6 +29,10 @@ struct HomeView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 StyledNavigationLink(destination: ProfileView(), label: "Profile")
+                Button("Profile") {
+                    navigationManager.navigate(to: ProfileView.self)
+                }
+                .buttonStyle(.borderedProminent)
                 Button("Reset User") {
                     viewModel.resetUser();
                     navigationManager.navigate(to: FirstTimeSetupView.self)
