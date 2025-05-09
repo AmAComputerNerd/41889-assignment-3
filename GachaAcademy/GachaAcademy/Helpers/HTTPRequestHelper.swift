@@ -49,5 +49,6 @@ enum ApiRequestError: Error, LocalizedError {
             
         case .invalidResponse:
             return "HTTP response was invalid";
+        }
     }
 }
