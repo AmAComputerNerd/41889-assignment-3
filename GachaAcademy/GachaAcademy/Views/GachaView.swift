@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct GachaView : View {
+    @Environment(\.modelContext) private var modelContext;
     @StateObject var viewModel: GachaViewModel = GachaViewModel();
     
     var body: some View {
@@ -19,7 +20,7 @@ struct GachaView : View {
                     .font(.title)
                     .foregroundStyle(.black)
                     .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
-                Text("Pity \(viewModel.pityCount) rate \(viewModel.current5StarRate)")
+                Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets")
                     .position(x:geometry.size.width/2, y:geometry.size.height * 0.15)
                 RoundedRectangle(cornerRadius: 25)
                     .overlay(content: {
@@ -74,9 +75,17 @@ struct GachaView : View {
                         }) {
                             Text("Test")
                         }
+                    Button(action: {
+                        viewModel.giveTicket()
+                    }) {
+                        Text("Give Ticket")
+                    }
                 }
                 .position(x:geometry.size.width/2, y:geometry.size.height * 0.9)
             }
+        }
+        .onAppear() {
+            viewModel.refresh(modelContext: modelContext)
         }
     }
     
@@ -94,4 +103,6 @@ struct GachaView : View {
 
 #Preview {
     GachaView()
+        .environmentObject(NavigationManager())
+        .modelContainer(for: [User.self, Cosmetic.self, FlashcardSet.self, Flashcard.self])
 }

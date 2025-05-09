@@ -19,7 +19,7 @@ class User: Identifiable {
     @Relationship var recentCollections: [FlashcardSet] = [];
     @Relationship var appliedCosmetics: [Cosmetic] = [];
     
-    init(name: String, apiKey: String, avatarURL: URL) {
+    init(name: String, apiKey: String, avatarURL: URL?) {
         self.name = name;
         self.apiKey = apiKey;
         self.avatarURL = avatarURL;
