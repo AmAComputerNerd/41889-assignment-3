@@ -24,7 +24,10 @@ struct HomeView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             HStack {
-                StyledNavigationLink(destination: GachaView(), label: "Gacha")
+                Button("Gacha") {
+                    navigationManager.navigate(to: GachaView.self)
+                }
+                .buttonStyle(.borderedProminent)
                 StyledNavigationLink(destination: ProfileView(), label: "Profile")
                 Button("Reset User") {
                     viewModel.resetUser();
