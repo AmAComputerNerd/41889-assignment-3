@@ -22,4 +22,15 @@ class ProfileViewModel: ObservableObject {
         self.user = self.dataHelper!.fetchUser();
         self.availableCosmetics = self.dataHelper!.fetchAllCosmetics();
     }
+    
+    func updateAPIKey(_ newKey: String) {
+        if let dataHelper = self.dataHelper {
+            _ = dataHelper.updateUser(apiKey: newKey);
+            self.user = dataHelper.fetchUser();
+        }
+    }
+    
+    func importFlashcardSet(from url: String) {
+        // TODO: Import
+    }
 }

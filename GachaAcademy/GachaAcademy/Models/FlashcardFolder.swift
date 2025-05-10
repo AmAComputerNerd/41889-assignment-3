@@ -5,6 +5,7 @@ import SwiftData
 class FlashcardFolder: Identifiable {
     var id: UUID = UUID();
     var name: String;
+    @Relationship var owner: User?
     @Relationship var subFolders: [FlashcardFolder]
     @Relationship var flashcardSets: [FlashcardSet]
     

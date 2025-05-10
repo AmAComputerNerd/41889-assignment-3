@@ -62,5 +62,5 @@ struct FirstTimeSetupView: View {
 #Preview {
     FirstTimeSetupView()
         .environmentObject(NavigationManager())
-        .modelContainer(for: [User.self, Cosmetic.self, FlashcardSet.self, Flashcard.self])
+        .modelContainer(for: [User.self, Cosmetic.self, FlashcardFolder.self, FlashcardSet.self, Flashcard.self])
 }

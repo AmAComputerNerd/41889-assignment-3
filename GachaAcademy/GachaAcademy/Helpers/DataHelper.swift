@@ -35,7 +35,7 @@ class DataHelper: ObservableObject {
         return self.saveChanges();
     }
     
-    func updateUser(name: String?, apiKey: String?, avatarURL: URL?, ticketCount: Int?) -> Bool {
+    func updateUser(name: String? = nil, apiKey: String? = nil, avatarURL: String? = nil, ticketCount: Int? = nil) -> Bool {
         guard let existingUser = self.fetchUser() else { return false; }
         
         if let name = name { existingUser.name = name }
@@ -62,6 +62,7 @@ class DataHelper: ObservableObject {
         catch {
             return false;
         }
+        return self.saveChanges();
     }
     
     func fetchAllCosmetics(predicate: Predicate<Cosmetic> = .true, sortDescriptors: [SortDescriptor<Cosmetic>] = []) -> [Cosmetic] {
