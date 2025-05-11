@@ -10,7 +10,7 @@ import Foundation
 class CosmeticFactory {
     public static var threeStars: [() -> Cosmetic] = [
         { Cosmetic("Bronze Avatar", .Avatar, .Common, "example_avatar") },
-        { Cosmetic("Wooden Background", .Background, .Common, nil) },
+        { Cosmetic("Wooden Background", .Background, .Common, "example_background") },
         { Cosmetic("Basic Flashcard Background", .FlashcardBackground, .Common, nil) },
         { Cosmetic("Iron Flashcard Border", .FlashcardBorder, .Common, nil) },
         //{ Cosmetic("Leather Armour", .Dummy, .Common, nil) },

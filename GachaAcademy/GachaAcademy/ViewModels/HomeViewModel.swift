@@ -9,9 +9,9 @@ import Foundation
 import SwiftData
 
 class HomeViewModel: ObservableObject {
+    @Published var user: User? = nil;
     @Published var userName: String = "";
     @Published var apiKey: String = "";
-    @Published var gachaCount: Int = 0;
     private var dataHelper: DataHelper? = nil;
     
     func refresh(modelContext: ModelContext) {
@@ -22,6 +22,7 @@ class HomeViewModel: ObservableObject {
         }
         
         let user = dataHelper!.fetchUser();
+        self.user = user;
         self.userName = user?.name ?? "Not logged in";
         self.apiKey = user?.apiKey ?? "";
     }

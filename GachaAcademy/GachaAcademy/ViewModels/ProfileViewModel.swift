@@ -34,6 +34,23 @@ class ProfileViewModel: ObservableObject {
     }
     
     func applyCosmetics(_ cosmetics: [Cosmetic]) {
+        var currentCosmetics = user?.appliedCosmetics ?? [];
+        let newCosmeticsByType = Dictionary(uniqueKeysWithValues: cosmetics.map { ($0.type, $0) });
+        
+        // Replace existing cosmetics by type with any new ones selected.
+        currentCosmetics = currentCosmetics.map { cosmetic in
+            if let newCosmetic = newCosmeticsByType[cosmetic.type] {
+                return newCosmetic;
+            }
+            return cosmetic;
+        }
+        
+        // Add any new cosmetics that were not already present
+        for newCosmetic in cosmetics {
+            if !currentCosmetics.contains(where: { $0.type == newCosmetic.type }) {
+                currentCosmetics.append(newCosmetic)
+            }
+        }
         if let dataHelper = self.dataHelper {
             _ = dataHelper.updateUser(appliedCosmetics: cosmetics);
             self.user = dataHelper.fetchUser();
