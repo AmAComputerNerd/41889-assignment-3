@@ -15,7 +15,7 @@ struct RootView: View {
         // Pass all environment objects needed by child views in here:
         let view = navigationManager.currentView
             .environmentObject(navigationManager)
-            .modelContainer(for: [User.self, Cosmetic.self, FlashcardSet.self, Flashcard.self])
+            .modelContainer(for: [User.self, Cosmetic.self, FlashcardFolder.self, FlashcardSet.self, Flashcard.self])
         
         if navigationManager.supportsNavigation {
             NavigationStack() {

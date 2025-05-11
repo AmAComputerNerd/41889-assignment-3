@@ -29,7 +29,7 @@ class FirstTimeSetupViewModel: ObservableObject {
     }
     
     func setupNewUser() {
-        let user = User(name: self.username, apiKey: self.apiKey, avatarURL: URL(string: "temp"))
+        let user = User(name: self.username, apiKey: self.apiKey);
         let result = self.dataHelper?.createUserIfNotExists(user: user);
         if result == true {
             self.isSetupRequired = false;

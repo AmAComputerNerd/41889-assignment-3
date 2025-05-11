@@ -73,7 +73,7 @@ class GachaViewModel : ObservableObject
                 break;
         }
         _ = dataHelper?.addCosmetic(cosmetic: lastPulledItems.last!);
-        _ = dataHelper?.updateUser(name: user?.name, apiKey: user?.apiKey, avatarURL: user?.avatarURL, ticketCount: user!.ticketCount - 1)
+        _ = dataHelper?.updateUser(ticketCount: user!.ticketCount - 1)
     }
     
     func getItemRarity() -> Rarity
@@ -114,6 +114,6 @@ class GachaViewModel : ObservableObject
     
     func giveTicket()
     {
-        _ = dataHelper?.updateUser(name: user?.name, apiKey: user?.apiKey, avatarURL: user?.avatarURL, ticketCount: user!.ticketCount + 1)
+        _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 1)
     }
 }

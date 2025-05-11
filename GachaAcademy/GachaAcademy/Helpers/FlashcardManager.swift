@@ -50,16 +50,16 @@ class FlashcardManager {
     }
     
     static func flashcardInfoDtoToFlashcard(flashcardInfoDTO: FlashcardInfoDTO) async throws -> Flashcard {
-        var flashcardDTO = try await retrieveFlashcard(cardID: flashcardInfoDTO.cardID);
+        let flashcardDTO = try await retrieveFlashcard(cardID: flashcardInfoDTO.cardID);
         return Flashcard(front: flashcardDTO.front, back: flashcardDTO.back);
     }
     
     static func getFlashcardsFromDTOs(folderDTOs: [FolderDTO], folderName: String? = nil) async throws -> FlashcardFolder {
-        var flashcardFolder = FlashcardFolder(name: folderName);
+        let flashcardFolder = FlashcardFolder(name: folderName);
         
         for folderDTO in folderDTOs {
             if (folderDTO.flashcards.count > 0) {
-                var flashcardSet = FlashcardSet(name: folderDTO.name)
+                let flashcardSet = FlashcardSet(name: folderDTO.name)
                 for flashcardInfoDTO in folderDTO.flashcards {
                     flashcardSet.flashcards.append(try await flashcardInfoDtoToFlashcard(flashcardInfoDTO: flashcardInfoDTO));
                 }
