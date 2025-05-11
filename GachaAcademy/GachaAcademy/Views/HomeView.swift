@@ -30,7 +30,6 @@ struct HomeView: View {
                         navigationManager.navigate(to: GachaView.self)
                     }
                     .buttonStyle(.borderedProminent)
-                    StyledNavigationLink(destination: ProfileView(), label: "Profile")
                     Button("Profile") {
                         navigationManager.navigate(to: ProfileView.self)
                     }

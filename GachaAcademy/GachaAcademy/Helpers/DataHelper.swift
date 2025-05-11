@@ -23,7 +23,15 @@ class DataHelper: ObservableObject {
     
     func fetchUser() -> User? {
         let descriptor = FetchDescriptor<User>();
-        return try? self.modelContext.fetch(descriptor).first;
+        if let result = try? self.modelContext.fetch(descriptor).first
+        {
+            // for le de bug
+            return result;
+        }
+        else
+        {
+            return nil;
+        }
     }
     
     func createUserIfNotExists(user: User) -> Bool {
@@ -75,8 +83,19 @@ class DataHelper: ObservableObject {
     }
     
     func addCosmetic(cosmetic: Cosmetic) -> Bool {
-        self.modelContext.insert(cosmetic);
-        return self.saveChanges();
+        let nameToMatch = cosmetic.name;
+        let namePredicate = #Predicate<Cosmetic> { existingCosmetic in
+            existingCosmetic.name == nameToMatch
+        }
+        
+        let duplicateCosmetics = fetchAllCosmetics(predicate: namePredicate);
+        
+        guard !duplicateCosmetics.isEmpty else
+        {
+            self.modelContext.insert(cosmetic);
+            return self.saveChanges();
+        }
+        return false;
     }
     
     func removeCosmetic(cosmetic: Cosmetic) -> Bool {
