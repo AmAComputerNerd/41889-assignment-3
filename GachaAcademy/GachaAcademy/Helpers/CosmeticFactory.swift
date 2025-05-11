@@ -9,16 +9,16 @@ import Foundation
 
 class CosmeticFactory {
     public static var threeStars: [() -> Cosmetic] = [
-        { Cosmetic("Bronze Helmet", .Dummy, .Common, nil) },
-        { Cosmetic("Wooden Sword", .Dummy, .Common, nil) },
-        { Cosmetic("Basic Staff", .Dummy, .Common, nil) },
-        { Cosmetic("Iron Dagger", .Dummy, .Common, nil) },
-        { Cosmetic("Leather Armour", .Dummy, .Common, nil) },
-        { Cosmetic("Wooden Shield", .Dummy, .Common, nil) },
-        { Cosmetic("Bronze Shield", .Dummy, .Common, nil) },
-        { Cosmetic("Iron Shield", .Dummy, .Common, nil) },
-        { Cosmetic("Bronze Sword", .Dummy, .Common, nil) },
-        { Cosmetic("Iron Sword", .Dummy, .Common, nil) },
+        { Cosmetic("Bronze Avatar", .Avatar, .Common, "example_avatar") },
+        { Cosmetic("Wooden Background", .Background, .Common, nil) },
+        { Cosmetic("Basic Flashcard Background", .FlashcardBackground, .Common, nil) },
+        { Cosmetic("Iron Flashcard Border", .FlashcardBorder, .Common, nil) },
+        //{ Cosmetic("Leather Armour", .Dummy, .Common, nil) },
+        //{ Cosmetic("Wooden Shield", .Dummy, .Common, nil) },
+        //{ Cosmetic("Bronze Shield", .Dummy, .Common, nil) },
+        //{ Cosmetic("Iron Shield", .Dummy, .Common, nil) },
+        //{ Cosmetic("Bronze Sword", .Dummy, .Common, nil) },
+        //{ Cosmetic("Iron Sword", .Dummy, .Common, nil) },
     ];
     public static var fourStars: [() -> Cosmetic] = [
         { Cosmetic("Bronze Helmet", .Dummy, .Epic, nil) },

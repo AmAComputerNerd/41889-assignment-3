@@ -22,16 +22,13 @@ class Cosmetic : Identifiable
     var rarity : Rarity {
         Rarity(rawValue: rarityData)!;
     }
-    var spriteData : Data;
-    var sprite: UIImage? {
-        UIImage(data: spriteData)
-    }
+    var spriteName: String?;
     
-    init(_ name : String, _ type: CosmeticType, _ rarity : Rarity, _ image : UIImage?)
+    init(_ name : String, _ type: CosmeticType, _ rarity : Rarity, _ spriteName : String?)
     {
         self.name = name;
         self.typeData = type.rawValue;
         self.rarityData = rarity.rawValue;
-        self.spriteData = image?.pngData() ?? Data();
+        self.spriteName = spriteName;
     }
 }

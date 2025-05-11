@@ -35,13 +35,13 @@ class DataHelper: ObservableObject {
         return self.saveChanges();
     }
     
-    func updateUser(name: String? = nil, apiKey: String? = nil, avatarURL: String? = nil, ticketCount: Int? = nil) -> Bool {
+    func updateUser(name: String? = nil, apiKey: String? = nil, ticketCount: Int? = nil, appliedCosmetics: [Cosmetic]? = nil) -> Bool {
         guard let existingUser = self.fetchUser() else { return false; }
         
         if let name = name { existingUser.name = name }
         if let apiKey = apiKey { existingUser.apiKey = apiKey }
-        if let avatarURL = avatarURL { existingUser.avatarURL = avatarURL }
         if let ticketCount = ticketCount { existingUser.ticketCount = ticketCount }
+        if let appliedCosmetics = appliedCosmetics { existingUser.appliedCosmetics = appliedCosmetics }
         
         return self.saveChanges();
     }

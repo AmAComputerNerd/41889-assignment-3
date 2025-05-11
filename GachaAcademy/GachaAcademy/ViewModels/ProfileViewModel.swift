@@ -11,6 +11,8 @@ import SwiftData
 class ProfileViewModel: ObservableObject {
     @Published var user: User? = nil;
     @Published var availableCosmetics: [Cosmetic] = [];
+    @Published var validationErrorMessage: String? = nil;
+    @Published var apiKeyIsValid: Bool = true;
     private var dataHelper: DataHelper? = nil;
     
     func refresh(modelContext: ModelContext) {
@@ -28,9 +30,19 @@ class ProfileViewModel: ObservableObject {
             _ = dataHelper.updateUser(apiKey: newKey);
             self.user = dataHelper.fetchUser();
         }
+        self.validationErrorMessage = nil;
     }
     
-    func importFlashcardSet(from url: String) {
+    func applyCosmetics(_ cosmetics: [Cosmetic]) {
+        if let dataHelper = self.dataHelper {
+            _ = dataHelper.updateUser(appliedCosmetics: cosmetics);
+            self.user = dataHelper.fetchUser();
+        }
+    }
+    
+    func importFlashcardSet(from url: String) -> Bool {
         // TODO: Import
+        self.validationErrorMessage = "Failed to import - bad URL.";
+        return false;
     }
 }
