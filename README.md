@@ -3,9 +3,9 @@ Assignment 3 for 41889 Application Development in the iOS Environment
 
 ## Collaborators
 - AmAComputerNerd: Jonathon Thomson (25488154)
-- Grimmace19: Kyan Grimm (StudentNoHere)
+- Grimmace19: Kyan Grimm (25482187)
 - TakedownChain23: Isaac Thomas (StudentNoHere)
-- treggosaurus: Tristan Huang (StudentNoHere)
+- treggosaurus: Tristan Huang (25322025)
 
 ## Developer Guide
 Things to keep in mind while developing!
@@ -20,7 +20,10 @@ private let viewFactories: [String: () -> AnyView] = [
   // Insert your view here
 ];
 ```
-After this, navigation to this view can be set up using the navigationManager in any other view! This is an @EnvironmentObject which is accessible in all View classes. To add the navigationManager object to your View, try to replicate a setup like this:
+This is all you need to do to enable navigation to your View! Somewhat easy.
+
+### Navigating to other views with NavigationManager
+Navigation to a view can be set up using the navigationManager environment variable. This is an @EnvironmentObject which is accessible in all View classes. To add the navigationManager object to your View, try to replicate a setup like this:
 ```swift
 class SomeView: View {
   @EnvironmentObject var navigationManager: NavigationManager;
@@ -87,5 +90,23 @@ var body: some View {
 }
 ```
 And we're done - your View should now be set up for DataHelper access!
+
+### Add backgrounds to your page
+If you wanna add background support, you'll first need to set up your page for DataHelper access above as you'll need access to the User object retrieved through DataHelper.fetchUser(). When you've got that, you should modify your View to match this template below:
+```swift
+var body: some View {
+    ZStack {
+        BackgroundView(spriteName: viewModel?.user.spriteName)
+        // ... The rest of your View content, e.g.
+        VStack {
+            Text("EEEEE")
+        }
+    }
+}
+```
+Now your page should dynamically update based on the user's selected background! :)
+
+### DB not working?
+If you've just pulled master and your DB is not working and saving data, it might be because SwiftData (the system we use for persistent data storage) can't automigrate the current data you have saved to the new schema. In this case, you can fix this error by deleting the app on the iPhone simulator that pops up when you press Run. This deletes all related data and should allow you to start fresh.
 
 If you're still unsure, take a look at how FirstTimeSetupView and FirstTimeSetupViewModel were made - they're pretty simple and showcase all these ideas well.
