@@ -9,28 +9,32 @@ import Foundation
 
 class CosmeticFactory {
     public static var threeStars: [() -> Cosmetic] = [
-        { Cosmetic("Bronze Avatar", .Avatar, .Common, "example_avatar") },
-        { Cosmetic("Wooden Background", .Background, .Common, nil) },
-        { Cosmetic("Basic Flashcard Background", .FlashcardBackground, .Common, nil) },
-        { Cosmetic("Iron Flashcard Border", .FlashcardBorder, .Common, nil) },
-        //{ Cosmetic("Leather Armour", .Dummy, .Common, nil) },
-        //{ Cosmetic("Wooden Shield", .Dummy, .Common, nil) },
-        //{ Cosmetic("Bronze Shield", .Dummy, .Common, nil) },
-        //{ Cosmetic("Iron Shield", .Dummy, .Common, nil) },
-        //{ Cosmetic("Bronze Sword", .Dummy, .Common, nil) },
-        //{ Cosmetic("Iron Sword", .Dummy, .Common, nil) },
+        { Cosmetic("Pink Flashcard", .FlashcardBackground, .Common, "Pink") },
+        { Cosmetic("Blue Flashcard", .FlashcardBackground, .Common, "Blue") },
+        { Cosmetic("Green Flashcard", .FlashcardBackground, .Common, "Green") },
+        { Cosmetic("Nature Background", .Background, .Common, "Nature") },
+        { Cosmetic("Space Background", .Background, .Common, "Space") },
+        { Cosmetic("Beach Background", .Background, .Common, "Beach") },
+        { Cosmetic("Anime Man", .Avatar, .Common, "AnimeMan") },
+        { Cosmetic("Anime Woman", .Avatar, .Common, "AnimeWoman") },
+        { Cosmetic("Frog", .Avatar, .Common, "Frog") },
+        { Cosmetic("Skeleton", .Avatar, .Common, "Skeleton") },
+        //{ Cosmetic("Iron Flashcard Border", .FlashcardBorder, .Common, nil) },
     ];
     public static var fourStars: [() -> Cosmetic] = [
-        { Cosmetic("Bronze Helmet", .Dummy, .Epic, nil) },
-        { Cosmetic("Wooden Sword", .Dummy, .Epic, nil) },
-        { Cosmetic("Basic Staff", .Dummy, .Epic, nil) },
-        { Cosmetic("Iron Dagger", .Dummy, .Epic, nil) },
-        { Cosmetic("Leather Armour", .Dummy, .Epic, nil) },
+        { Cosmetic("Alien Planet Background", .Background, .Epic, "AlienPlanet") },
+        { Cosmetic("Minecraft Background", .Background, .Epic, "Minecraft") },
+        { Cosmetic("Squiggle Flashcard", .FlashcardBackground, .Epic, "Squiggles") },
+        { Cosmetic("Leaf Flashcard", .FlashcardBackground, .Epic, "Leaves") },
+        { Cosmetic("Goku", .Avatar, .Epic, "Goku") },
+        { Cosmetic("Unicorn", .Avatar, .Common, "Unicorn") },
     ];
     public static var fiveStars: [() -> Cosmetic] = [
-        { Cosmetic("Bronze Helmet", .Dummy, .Legendary, nil) },
-        { Cosmetic("Wooden Sword", .Dummy, .Legendary, nil) },
-        { Cosmetic("Basic Staff", .Dummy, .Legendary, nil) },
+        { Cosmetic("Cityscape Background", .Background, .Legendary, "Cityscape") },
+        { Cosmetic("Lofi Background", .Background, .Legendary, "Lofi") },
+        { Cosmetic("Iron Dagger", .FlashcardBackground, .Legendary, nil) },
+        { Cosmetic("Shocked", .Avatar, .Legendary, "Shocked") },
+        { Cosmetic("Miku", .Avatar, .Legendary, "Miku") },
     ];
     
     static func createRandomThreeStar() -> Cosmetic {

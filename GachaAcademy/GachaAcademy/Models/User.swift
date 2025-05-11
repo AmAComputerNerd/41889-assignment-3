@@ -36,7 +36,7 @@ class User: Identifiable {
     init(name: String, apiKey: String) {
         self.name = name;
         self.apiKey = apiKey;
-        self.ticketCount = 0;
+        self.ticketCount = 30;
         self.flashcards = FlashcardFolder();
     }
 }
