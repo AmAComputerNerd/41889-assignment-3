@@ -52,7 +52,7 @@ class ProfileViewModel: ObservableObject {
             }
         }
         if let dataHelper = self.dataHelper {
-            _ = dataHelper.updateUser(appliedCosmetics: cosmetics);
+            _ = dataHelper.updateUser(appliedCosmetics: currentCosmetics);
             self.user = dataHelper.fetchUser();
         }
     }

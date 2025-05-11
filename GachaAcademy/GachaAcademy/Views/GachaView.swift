@@ -24,7 +24,7 @@ struct GachaView : View {
                         .font(.title)
                         .foregroundStyle(.black)
                         .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
-                    Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets \(String(describing: viewModel.user?.ticketCount))")
+                    Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets \(viewModel.user?.ticketCount ?? 0)")
                         .position(x:geometry.size.width/2, y:geometry.size.height * 0.15)
                     RoundedRectangle(cornerRadius: 25)
                         .overlay(content: {

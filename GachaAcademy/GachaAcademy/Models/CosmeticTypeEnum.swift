@@ -8,7 +8,6 @@
 import Foundation
 
 enum CosmeticType: String, CaseIterable {
-    case Dummy = "Test Item";
     case Avatar = "Avatar";
     case Background = "Background";
     case FlashcardBackground = "Card Background";
