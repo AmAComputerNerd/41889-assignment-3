@@ -14,11 +14,11 @@ class GachaViewModel : ObservableObject
     // TODO: Add pulled cosmetics to the list of Cosmetics with DataHelper. These will be used as the player's "available" cosmetics which determines which ones they can apply.
     @AppStorage("Pity") var pityCount : Int = 0;
     @AppStorage("5StarRate") var current5StarRate : Double = 0.006;
-    @AppStorage("5StarRate") var current4StarRate : Double = 0.051;
-    @AppStorage("Last4Star") var last4Star : Int = 0;
+    @AppStorage("4StarRate") var current4StarRate : Double = 0.051;
     @Published var lastPulledItems : [Cosmetic] = [];
     private var dataHelper: DataHelper? = nil;
     @Published var user: User? = nil;
+    @Published var currencyError = false;
     
     func refresh(modelContext: ModelContext) {
         if let dataHelper = dataHelper {
@@ -34,33 +34,48 @@ class GachaViewModel : ObservableObject
         pityCount = UserDefaults.standard.integer(forKey: "Pity");
         current5StarRate = UserDefaults.standard.double(forKey: "5StarRate");
         current4StarRate = UserDefaults.standard.double(forKey: "4StarRate");
-        last4Star = UserDefaults.standard.integer(forKey: "last4Star");
     }
     
     func singlePull()
     {
-        if user!.ticketCount >= 1
+        guard user == nil else
         {
-            lastPulledItems = [];
-            pullItem();
+            if user!.ticketCount >= 1
+            {
+                lastPulledItems = [];
+                pullItem();
+            }
+            else
+            {
+                currencyError = true;
+            }
+            return;
         }
     }
     
     func tenPull()
     {
-        if user!.ticketCount >= 10
+        guard user == nil else
         {
-            lastPulledItems = [];
-            for _ in 1...10 {
-                pullItem();
+            if user!.ticketCount >= 10
+            {
+                lastPulledItems = [];
+                for _ in 1...10 {
+                    pullItem();
+                }
             }
+            else
+            {
+                currencyError = true;
+            }
+            return;
         }
     }
     
     func pullItem()
     {
+        currencyError = false;
         let newCosmeticRarity = getItemRarity();
-        incrementPityCountAndRate();
         switch newCosmeticRarity {
             case .Common:
                 lastPulledItems.append(CosmeticFactory.createRandomThreeStar());
@@ -72,6 +87,7 @@ class GachaViewModel : ObservableObject
                 lastPulledItems.append(CosmeticFactory.createRandomFiveStar());
                 break;
         }
+        incrementPityCountAndRate();
         _ = dataHelper?.addCosmetic(cosmetic: lastPulledItems.last!);
         _ = dataHelper?.updateUser(ticketCount: user!.ticketCount - 1)
     }
@@ -85,11 +101,11 @@ class GachaViewModel : ObservableObject
             rarity = .Legendary;
             pityCount = 0;
             current5StarRate = 0.006;
+            current4StarRate = 0.051;
         }
         else if selection >= (1 - current4StarRate) && selection <= 1 // 4 star rate of 5.1%
         {
             rarity = .Epic;
-            last4Star = 0;
             current4StarRate = 0.051;
         }
         else // 3 star by default
@@ -102,9 +118,12 @@ class GachaViewModel : ObservableObject
     func incrementPityCountAndRate()
     {
         pityCount += 1;
-        if lastPulledItems.last?.rarity != .Epic
+        if lastPulledItems.last?.rarity != .Epic // increase 4 star rate for roughly one every 10 pulls
         {
-            current4StarRate += ((1.0 - current5StarRate) / (90.0 - Double(pityCount)) / (10 - current4StarRate));
+            let mod = pityCount % 10;
+            let target = 1 - current4StarRate; //0.949
+            let unadjustedRateAddition = target / (10.0 - Double(mod)); //0.0949
+            current4StarRate += unadjustedRateAddition / 10;
         }
         if (pityCount > 74) // exponentially increase 5 star rate when between 75 and 90 pity
         {
@@ -114,6 +133,10 @@ class GachaViewModel : ObservableObject
     
     func giveTicket()
     {
-        _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 1)
+        guard user == nil else
+        {
+            _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 10)
+            return;
+        }
     }
 }
