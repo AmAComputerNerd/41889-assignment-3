@@ -40,11 +40,12 @@ class FirstTimeSetupViewModel: ObservableObject {
     
     func resetUser() {
         // DEBUG
-        let result = self.dataHelper?.clearUser();
-        if result == true {
-            self.validationErrorMessage = "DEBUG > Cleared user successfully.";
+        let resultUser = self.dataHelper?.clearUser();
+        let resultCosmetics = self.dataHelper?.clearCosmetics();
+        if resultUser == true && resultCosmetics == true {
+            self.validationErrorMessage = "DEBUG > Cleared user and cosmetics successfully.";
         } else {
-            self.validationErrorMessage = "DEBUG > Failed to clear user - didn't exist, random error or self.dataHelper wasn't populated."
+            self.validationErrorMessage = "DEBUG > Failed to clear user / cosmetics - didn't exist, random error or self.dataHelper wasn't populated."
         }
     }
 }

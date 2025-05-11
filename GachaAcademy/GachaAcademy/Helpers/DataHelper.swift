@@ -103,6 +103,11 @@ class DataHelper: ObservableObject {
         return self.saveChanges();
     }
     
+    func clearCosmetics() -> Bool {
+        try? self.modelContext.delete(model: Cosmetic.self);
+        return self.saveChanges();
+    }
+    
     @discardableResult
     private func saveChanges() -> Bool {
         do {

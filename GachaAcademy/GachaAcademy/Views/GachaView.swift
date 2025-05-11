@@ -15,100 +15,108 @@ struct GachaView : View {
     @State private var shouldFade: Bool = true
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack
-            {
-                Text("Cosmetics Gacha")
-                    .font(.title)
-                    .foregroundStyle(.black)
-                    .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
-                Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets \(String(describing: viewModel.user?.ticketCount))")
-                    .position(x:geometry.size.width/2, y:geometry.size.height * 0.15)
-                RoundedRectangle(cornerRadius: 25)
-                    .overlay(content: {
-                        if !viewModel.lastPulledItems.isEmpty
-                        {
-                            VStack(spacing: 5){
-                                ForEach(viewModel.lastPulledItems) { item in
-                                    ZStack
-                                    {
-                                        Rectangle()
-                                            .fill(color(for: item.rarity))
-                                            .opacity(shouldFade ? 1.0 : 0.0)
-                                        
-                                        HStack
+        ZStack {
+            BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
+            GeometryReader { geometry in
+                ZStack
+                {
+                    Text("Cosmetics Gacha")
+                        .font(.title)
+                        .foregroundStyle(.black)
+                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
+                    Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets \(viewModel.user?.ticketCount ?? 0)")
+                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.15)
+                    RoundedRectangle(cornerRadius: 25)
+                        .overlay(content: {
+                            if !viewModel.lastPulledItems.isEmpty
+                            {
+                                VStack(spacing: 5){
+                                    ForEach(viewModel.lastPulledItems) { item in
+                                        ZStack
                                         {
-                                            Image(item.spriteName!).resizable()
-                                                .scaledToFit()
-                                                .frame(width: 40, height: 40)
-                                                .clipped()
-                                            Text(item.name)
-                                                .foregroundColor(color(for: item.rarity))
-                                                .font(.title3)
+                                            Rectangle()
+                                                .fill(color(for: item.rarity))
+                                                .opacity(shouldFade ? 1.0 : 0.0)
+                                            
+                                            HStack
+                                            {
+                                                if item.spriteName != nil {
+                                                    Image(item.spriteName!).resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 40, height: 40)
+                                                        .clipped()
+                                                } else {
+                                                    Rectangle()
+                                                        .frame(width: 40, height: 40)
+                                                }
+                                                Text(item.name)
+                                                    .foregroundColor(color(for: item.rarity))
+                                                    .font(.title3)
+                                            }
                                         }
+                                        .animation(.easeOut(duration: 1.0), value: shouldFade)
                                     }
-                                    .animation(.easeOut(duration: 1.0), value: shouldFade)
                                 }
                             }
-                        }
-                    })
-                    .foregroundColor(.gray
-                    .opacity(0.2))
-                    .frame(width: geometry.size.width*0.8, height: geometry.size.height*0.65)
-                    .padding()
-                VStack
-                {
-                    HStack
-                    {
-                        Button(action: {
-                            viewModel.singlePull();
-                        }) {
-                            Text("1 Pull")
-                                .frame(minWidth: geometry.size.width*0.2, minHeight: geometry.size.height*0.05)
-                        }
-                        .background(.blue)
-                        .foregroundColor(.white)
-                        .clipShape(RoundedRectangle(cornerRadius:  5))
+                        })
+                        .foregroundColor(.gray
+                        .opacity(0.2))
+                        .frame(width: geometry.size.width*0.8, height: geometry.size.height*0.65)
                         .padding()
-                        
-                        Button(action: {
-                            viewModel.tenPull();
-                        }) {
-                            Text("10 Pulls")
-                                .frame(minWidth: geometry.size.width*0.2, minHeight: geometry.size.height*0.05)
-                        }
-                        .background(.blue)
-                        .foregroundColor(.white)
-                        .clipShape(RoundedRectangle(cornerRadius:  5))
-                        .padding()
-                        
-                        Button(action: {
-                            viewModel.giveTicket()
-                        }) {
-                            Text("Give Ticket")
-                        }
-                    }
-                    .position(x:geometry.size.width/2, y:geometry.size.height * 0.9)
-                    
-                    if viewModel.currencyError
+                    VStack
                     {
-                        Text("You do not have enough tickets")
-                            .foregroundStyle(.red)
-                            .font(.caption)
-                    }
-                    
-                    Button("Back to Home") {
-                        navigationManager.navigate(to: HomeView.self);
+                        HStack
+                        {
+                            Button(action: {
+                                viewModel.singlePull();
+                            }) {
+                                Text("1 Pull")
+                                    .frame(minWidth: geometry.size.width*0.2, minHeight: geometry.size.height*0.05)
+                            }
+                            .background(.blue)
+                            .foregroundColor(.white)
+                            .clipShape(RoundedRectangle(cornerRadius:  5))
+                            .padding()
+                            
+                            Button(action: {
+                                viewModel.tenPull();
+                            }) {
+                                Text("10 Pulls")
+                                    .frame(minWidth: geometry.size.width*0.2, minHeight: geometry.size.height*0.05)
+                            }
+                            .background(.blue)
+                            .foregroundColor(.white)
+                            .clipShape(RoundedRectangle(cornerRadius:  5))
+                            .padding()
+                            
+                            Button(action: {
+                                viewModel.giveTicket()
+                            }) {
+                                Text("Give Ticket")
+                            }
+                        }
+                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.9)
+                        
+                        if viewModel.currencyError
+                        {
+                            Text("You do not have enough tickets")
+                                .foregroundStyle(.red)
+                                .font(.caption)
+                        }
+                        
+                        Button("Back to Home") {
+                            navigationManager.navigate(to: HomeView.self);
+                        }
                     }
                 }
             }
-        }
-        .onAppear() {
-            viewModel.refresh(modelContext: modelContext)
-        }
-        .onChange(of: viewModel.lastPulledItems) { oldValue, newValue in
-            if oldValue != newValue {
-                triggerFade()
+            .onAppear() {
+                viewModel.refresh(modelContext: modelContext)
+            }
+            .onChange(of: viewModel.lastPulledItems) { oldValue, newValue in
+                if oldValue != newValue {
+                    triggerFade()
+                }
             }
         }
     }
@@ -125,11 +133,11 @@ struct GachaView : View {
     }
     
     private func triggerFade() {
-            shouldFade = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                shouldFade = false
-            }
+        shouldFade = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            shouldFade = false
         }
+    }
 }
 
 #Preview {
