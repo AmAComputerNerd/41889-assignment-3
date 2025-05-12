@@ -29,9 +29,6 @@ class User: Identifiable {
     var flashcardBackgroundSpriteName: String? {
         appliedCosmetics.first(where: { $0.type == CosmeticType.FlashcardBackground })?.spriteName;
     }
-    var flashcardBorderSpriteName: String? {
-        appliedCosmetics.first(where: { $0.type == CosmeticType.FlashcardBorder })?.spriteName;
-    }
     
     init(name: String, apiKey: String) {
         self.name = name;

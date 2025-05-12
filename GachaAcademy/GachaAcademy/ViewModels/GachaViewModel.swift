@@ -101,7 +101,6 @@ class GachaViewModel : ObservableObject
             rarity = .Legendary;
             pityCount = 0;
             current5StarRate = 0.006;
-            current4StarRate = 0.051;
         }
         else if selection >= (1 - current4StarRate) && selection <= 1 // 4 star rate of 5.1%
         {
