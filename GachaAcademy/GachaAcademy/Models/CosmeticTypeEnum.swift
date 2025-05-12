@@ -11,5 +11,4 @@ enum CosmeticType: String, CaseIterable {
     case Avatar = "Avatar";
     case Background = "Background";
     case FlashcardBackground = "Card Background";
-    case FlashcardBorder = "Card Border";
 }

@@ -61,8 +61,15 @@ struct FlashcardView: View {
                         })
                         .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                         .position(CGPoint(x: geometry.size.width/2, y: geometry.size.height/2))
-                    Button("Back to Home") {
+                    Button(action: {
                         navigationManager.navigate(to: HomeView.self);
+                    })
+                    {
+                        Image("Home")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 45, height: 45)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
             }

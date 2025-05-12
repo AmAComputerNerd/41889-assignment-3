@@ -80,10 +80,16 @@ struct ProfileView: View {
                 }
                 .buttonStyle(.bordered)
                 
-                Button("Back to Home") {
+                Button(action: {
                     navigationManager.navigate(to: HomeView.self);
+                })
+                {
+                    Image("Home")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 45, height: 45)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                .buttonStyle(.borderless)
                 
                 Spacer()
             }
