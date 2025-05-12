@@ -15,10 +15,12 @@ class GachaViewModel : ObservableObject
     @AppStorage("Pity") var pityCount : Int = 0;
     @AppStorage("5StarRate") var current5StarRate : Double = 0.006;
     @AppStorage("4StarRate") var current4StarRate : Double = 0.051;
+    @AppStorage("isGuaranteed") var isGuaranteed : Bool = false;
     @Published var lastPulledItems : [Cosmetic] = [];
     private var dataHelper: DataHelper? = nil;
     @Published var user: User? = nil;
     @Published var currencyError = false;
+    @Published var targetBanner = "Gojo";
     
     func refresh(modelContext: ModelContext) {
         if let dataHelper = dataHelper {
@@ -34,6 +36,7 @@ class GachaViewModel : ObservableObject
         pityCount = UserDefaults.standard.integer(forKey: "Pity");
         current5StarRate = UserDefaults.standard.double(forKey: "5StarRate");
         current4StarRate = UserDefaults.standard.double(forKey: "4StarRate");
+        isGuaranteed = UserDefaults.standard.bool(forKey: "isGuaranteed");
     }
     
     func singlePull()
@@ -84,8 +87,15 @@ class GachaViewModel : ObservableObject
                 lastPulledItems.append(CosmeticFactory.createRandomFourStar());
                 break;
             case .Legendary:
+            if targetBanner == "Standard"
+            {
                 lastPulledItems.append(CosmeticFactory.createRandomFiveStar());
-                break;
+            }
+            else
+            {
+                lastPulledItems.append(generateFiveStar());
+            }
+            break;
         }
         incrementPityCountAndRate();
         _ = dataHelper?.addCosmetic(cosmetic: lastPulledItems.last!);
@@ -137,5 +147,30 @@ class GachaViewModel : ObservableObject
             _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 10)
             return;
         }
+    }
+    
+    func generateFiveStar() -> Cosmetic
+    {
+        if !isGuaranteed
+        {
+            let wonFiftyFifty = Bool.random();
+            if wonFiftyFifty
+            {
+                isGuaranteed = false;
+                return Cosmetic(targetBanner, .Avatar, .Legendary, targetBanner);
+            }
+            else
+            {
+                isGuaranteed = true;
+                return CosmeticFactory.createRandomFiveStar();
+            }
+        }
+        isGuaranteed = false;
+        return Cosmetic(targetBanner, .Avatar, .Legendary, targetBanner);
+    }
+    
+    func getIsGuaranteed() -> Bool
+    {
+        return isGuaranteed;
     }
 }

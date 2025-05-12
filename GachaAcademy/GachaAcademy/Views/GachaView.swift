@@ -40,8 +40,41 @@ struct GachaView : View {
                                 .frame(width: 45, height: 45)
                         }
                     }.position(CGPoint(x: geometry.size.width*0.9, y: geometry.size.height*0.1))
-                    Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets \(viewModel.user?.ticketCount ?? 0)")
+                    Text("Pity - \(viewModel.pityCount) | Tickets - \(viewModel.user?.ticketCount ?? 0)")
                         .position(x:geometry.size.width/2, y:geometry.size.height * 0.15)
+                    
+                    VStack
+                    {
+                        Text("Banners")
+                            .font(.title2)
+                        ForEach(["Gojo", "Miku", "Standard"], id: \..self) { banner in
+                            Button(action: {
+                                viewModel.targetBanner = "\(banner)";
+                            }){
+                                Image("\(banner)Banner")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: geometry.size.width * 0.3, height: geometry.size.height * 0.1)
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(viewModel.targetBanner == banner ? Color.blue : Color.clear, lineWidth: 3)
+                                    )
+                            }
+                            .padding()
+                        }
+                        Text("Target: \(viewModel.targetBanner) Banner")
+                            .font(.caption)
+                        Text("Guaranteed: \(viewModel.getIsGuaranteed())")
+                            .font(.caption)
+                        Button(action: {
+                            viewModel.giveTicket()
+                        }) {
+                            Text("Give Ticket")
+                        }
+                        .padding()
+                    }
+                    .position(x: geometry.size.width * 0.175, y: geometry.size.height * 0.50)
                     RoundedRectangle(cornerRadius: 25)
                         .overlay(content: {
                             if !viewModel.lastPulledItems.isEmpty
@@ -77,7 +110,8 @@ struct GachaView : View {
                         })
                         .foregroundColor(.gray
                         .opacity(0.2))
-                        .frame(width: geometry.size.width*0.8, height: geometry.size.height*0.65)
+                        .frame(width: geometry.size.width*0.6, height: geometry.size.height*0.65)
+                        .position(x: geometry.size.width * 0.625, y: geometry.size.height / 2)
                         .padding()
                     VStack
                     {
@@ -104,12 +138,6 @@ struct GachaView : View {
                             .foregroundColor(.white)
                             .clipShape(RoundedRectangle(cornerRadius:  5))
                             .padding()
-                            
-                            Button(action: {
-                                viewModel.giveTicket()
-                            }) {
-                                Text("Give Ticket")
-                            }
                         }
                         .position(x:geometry.size.width/2, y:geometry.size.height * 0.9)
                         
@@ -120,8 +148,15 @@ struct GachaView : View {
                                 .font(.caption)
                         }
                         
-                        Button("Back to Home") {
+                        Button(action: {
                             navigationManager.navigate(to: HomeView.self);
+                        })
+                        {
+                            Image("Home")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 45, height: 45)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                     }
                 }

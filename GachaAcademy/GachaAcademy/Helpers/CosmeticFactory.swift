@@ -41,6 +41,7 @@ class CosmeticFactory {
         { Cosmetic("Goku", .Avatar, .Epic, "Goku") },
         { Cosmetic("Jazz", .Avatar, .Epic, "Jazz") },
         { Cosmetic("Mike", .Avatar, .Epic, "Mike") },
+        { Cosmetic("Shocked", .Avatar, .Epic, "Shocked") },
     ];
     public static var fiveStars: [() -> Cosmetic] = [
         { Cosmetic("Cityscape Background", .Background, .Legendary, "Cityscape") },
@@ -48,10 +49,12 @@ class CosmeticFactory {
         { Cosmetic("Swirl Background", .Background, .Legendary, "Swirl") },
         { Cosmetic("Neon Flashcard", .FlashcardBackground, .Legendary, "Neon") },
         { Cosmetic("Gold Frame Flashcard", .FlashcardBackground, .Legendary, "GoldFrame") },
-        { Cosmetic("Shocked", .Avatar, .Legendary, "Shocked") },
-        { Cosmetic("Miku", .Avatar, .Legendary, "Miku") },
-        { Cosmetic("Gojo", .Avatar, .Legendary, "Gojo") },
+        { Cosmetic("Magic Elf", .Avatar, .Legendary, "MagicElf") },
+        { Cosmetic("Mega Kermit", .Avatar, .Legendary, "MegaKermit") },
     ];
+    
+    // Cosmetic("Gojo", .Avatar, .Legendary, "Gojo")
+    // Cosmetic("Miku", .Avatar, .Legendary, "Miku")
     
     static func createRandomThreeStar() -> Cosmetic {
         return threeStars.randomElement()!();
