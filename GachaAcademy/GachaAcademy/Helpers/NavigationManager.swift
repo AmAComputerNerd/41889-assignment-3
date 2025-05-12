@@ -21,7 +21,8 @@ class NavigationManager: ObservableObject {
         ReflectionHelper.getClassNameFromType(FirstTimeSetupView.self): { AnyView(FirstTimeSetupView()) },
         ReflectionHelper.getClassNameFromType(HomeView.self): { AnyView(HomeView()) },
         ReflectionHelper.getClassNameFromType(GachaView.self): { AnyView(GachaView()) },
-        ReflectionHelper.getClassNameFromType(ProfileView.self): { AnyView(ProfileView()) }
+        ReflectionHelper.getClassNameFromType(ProfileView.self): { AnyView(ProfileView()) },
+        ReflectionHelper.getClassNameFromType(FlashcardView.self): { AnyView(FlashcardView()) }
     ];
     
     func navigate(to: Any.Type? = nil, withParams: (() -> AnyView)? = nil, supportsNavigation: Bool = false) {

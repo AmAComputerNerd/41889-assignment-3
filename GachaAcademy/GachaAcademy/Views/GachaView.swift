@@ -24,6 +24,22 @@ struct GachaView : View {
                         .font(.title)
                         .foregroundStyle(.black)
                         .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
+                    Button(action: {
+                        navigationManager.navigate(to: ProfileView.self);
+                    }) {
+                        if let avatar = viewModel.user?.avatarSpriteName {
+                            Image(avatar)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 45, height: 45)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.secondary, lineWidth: 2))
+                        } else {
+                            Circle()
+                                .fill(Color.gray)
+                                .frame(width: 45, height: 45)
+                        }
+                    }.position(CGPoint(x: geometry.size.width*0.9, y: geometry.size.height*0.1))
                     Text("Pity \(viewModel.pityCount) 5 rate \(viewModel.current5StarRate) 4 rate \(viewModel.current4StarRate) tickets \(viewModel.user?.ticketCount ?? 0)")
                         .position(x:geometry.size.width/2, y:geometry.size.height * 0.15)
                     RoundedRectangle(cornerRadius: 25)
@@ -134,7 +150,7 @@ struct GachaView : View {
     
     private func triggerFade() {
         shouldFade = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             shouldFade = false
         }
     }

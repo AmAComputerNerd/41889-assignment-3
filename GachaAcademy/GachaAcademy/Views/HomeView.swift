@@ -13,39 +13,45 @@ struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel = HomeViewModel();
     
     var body: some View {
-        ZStack {
-            BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
-            VStack {
-                Text("You have navigated to the Home screen, which means you're logged in!")
-                    .multilineTextAlignment(.center)
-                Text("You are logged in as \(viewModel.userName)")
-                    .multilineTextAlignment(.center)
-                Text("Your registered API key is: \(viewModel.apiKey)")
-                    .multilineTextAlignment(.center)
-                Text("This page is all temporary for now and will be updated with cool UI in the future, for now though can use the buttons below to navigate to different pages, or reset the user and go back to the First Time Setup if you are testing that.")
-                    .multilineTextAlignment(.center)
-                    .padding()
-                HStack {
-                    Button("Gacha") {
-                        navigationManager.navigate(to: GachaView.self)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    Button("Profile") {
-                        navigationManager.navigate(to: ProfileView.self)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    Button("Reset User") {
-                        viewModel.resetUser();
-                        navigationManager.navigate(to: FirstTimeSetupView.self)
-                    }
-                    .buttonStyle(.borderedProminent)
+        GeometryReader { geometry in
+            ZStack {
+                BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
+                    Text("Home")
+                        .font(.largeTitle)
+                        .padding()
+                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
+                    Text("You are logged in as \(viewModel.userName)")
+                        .multilineTextAlignment(.center)
+                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.2)
+                    Text("Your registered API key is: \(viewModel.apiKey)")
+                        .multilineTextAlignment(.center)
+                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.3)
+                    VStack(spacing: 45, content: {
+                        Button("Gacha") {
+                            navigationManager.navigate(to: GachaView.self)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button("Profile") {
+                            navigationManager.navigate(to: ProfileView.self)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button("Flashcards") {
+                            navigationManager.navigate(to: FlashcardView.self)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Button("Reset User") {
+                            viewModel.resetUser();
+                            navigationManager.navigate(to: FirstTimeSetupView.self)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    })
+                    .position(x:geometry.size.width/2, y:geometry.size.height * 0.6)
+                }
+                .onAppear() {
+                    viewModel.refresh(modelContext: modelContext)
                 }
             }
-            .onAppear() {
-                viewModel.refresh(modelContext: modelContext)
-            }
         }
-    }
 }
 
 #Preview {

@@ -27,7 +27,7 @@ struct ProfileView: View {
                 if let avatar = viewModel.user?.avatarSpriteName {
                     Image(avatar)
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .frame(width: 150, height: 150)
                         .clipShape(Circle())
                         .overlay(Circle().stroke(Color.secondary, lineWidth: 2))
