@@ -57,7 +57,7 @@ struct HomeView: View {
                 // Navigation Buttons Section
                 VStack(spacing: 20) {
                     Button(action: {
-                        navigationManager.navigate(to: FlashcardView.self)
+                        navigationManager.navigate(to: SetSelectionView.self)
                     }) {
                         ZStack {
                             Image("home-studyImg")

@@ -57,9 +57,8 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
-    func importFlashcardSet(from url: String) -> Bool {
-        // TODO: Import
-        self.validationErrorMessage = "Failed to import - bad URL.";
-        return false;
+    func updateFlashcards() async -> Bool {
+        let result = await dataHelper?.updateFlashcards() ?? false;
+        return result;
     }
 }

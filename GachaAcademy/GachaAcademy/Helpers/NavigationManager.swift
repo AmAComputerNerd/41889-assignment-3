@@ -22,7 +22,7 @@ class NavigationManager: ObservableObject {
         ReflectionHelper.getClassNameFromType(HomeView.self): { AnyView(HomeView()) },
         ReflectionHelper.getClassNameFromType(GachaView.self): { AnyView(GachaView()) },
         ReflectionHelper.getClassNameFromType(ProfileView.self): { AnyView(ProfileView()) },
-        ReflectionHelper.getClassNameFromType(FlashcardView.self): { AnyView(FlashcardView()) }
+        ReflectionHelper.getClassNameFromType(SetSelectionView.self): { AnyView(SetSelectionView()) }
     ];
     
     func navigate(to: Any.Type? = nil, withParams: (() -> AnyView)? = nil, supportsNavigation: Bool = false) {
