@@ -29,9 +29,13 @@ struct FirstTimeSetupView: View {
                 .multilineTextAlignment(.center)
             TextField("Name", text: $viewModel.username)
                 .multilineTextAlignment(.center)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
                 .padding()
             TextField("JWT Token", text: $viewModel.apiKey)
                 .multilineTextAlignment(.center)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
                 .padding()
             Spacer()
             Text("Don't have a Dolphin Flashcards account yet? See [here](https://docs.dolphinflashcards.com/api-reference/authentication) for instructions on how to set one up, paste it into the box above and start studying!")
@@ -41,7 +45,7 @@ struct FirstTimeSetupView: View {
                     viewModel.setupNewUser();
                 }
                 .buttonStyle(.borderedProminent)
-                Button("Reset") {
+                Button("Reset (Temporary))") {
                     viewModel.resetUser();
                 }
                 .buttonStyle(.borderedProminent)

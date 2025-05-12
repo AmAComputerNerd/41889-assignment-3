@@ -124,7 +124,7 @@ struct UpdateAPIKeyView: View {
                         .autocorrectionDisabled()
                 }
                 Section {
-                    Button("Test Connection") {
+                    Button("Test Connection (PLS EDIT)") {
                         // TODO: Test API connection and update validation field.
                         viewModel.validationErrorMessage = "Failed to hit the API - is your key valid?"
                         viewModel.apiKeyIsValid = false;
@@ -170,7 +170,9 @@ struct CosmeticsSelectorView: View {
                     
                     CosmeticsCategoryView(
                         type: type,
-                        availableCosmetics: viewModel.availableCosmetics.filter { $0.type == type },
+                        availableCosmetics: viewModel.availableCosmetics
+                                .filter { $0.type == type }
+                                .sorted(by: { $0.rarity < $1.rarity }),
                         selectedCosmetic: selectedBinding
                     )
                     .tabItem { Text(type.rawValue) }
@@ -249,7 +251,7 @@ struct ImportFlashcardsView: View {
                         .autocorrectionDisabled()
                 }
                 Section {
-                    Button("Import") {
+                    Button("Import (PLS EDIT)") {
                         let result = viewModel.importFlashcardSet(from: flashcardURL);
                         if result {
                             dismiss()
