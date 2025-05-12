@@ -7,51 +7,132 @@
 
 import SwiftUI
 
-struct HomeView: View {
-    @Environment(\.modelContext) private var modelContext;
-    @EnvironmentObject private var navigationManager: NavigationManager;
-    @StateObject private var viewModel: HomeViewModel = HomeViewModel();
+// A custom view to style navigation buttons with a system image icon and title.
+struct NavigationButtonLabel: View {
+    let icon: String
+    let title: String
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
+        HStack {
+            Image(systemName: icon)
+                .font(.title2)
+            Text(title)
+                .fontWeight(.medium)
+                .font(.title3)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+        .cornerRadius(10)
+    }
+}
+
+struct HomeView: View {
+    @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var navigationManager: NavigationManager
+    @StateObject private var viewModel: HomeViewModel = HomeViewModel()
+    
+    var body: some View {
+        ZStack {
+            // The background fills the entire screen.
+            BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
+            
+            VStack(spacing: 30) {
+                // Header Section
+                VStack(spacing: 10) {
                     Text("Home")
                         .font(.largeTitle)
-                        .padding()
-                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
-                    Text("You are logged in as \(viewModel.userName)")
+                        .fontWeight(.bold)
+                    
+                    Text("Logged in as \(viewModel.userName)")
                         .multilineTextAlignment(.center)
-                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.2)
-                    Text("Your registered API key is: \(viewModel.apiKey)")
+                    
+                    Text("API Key: \(viewModel.apiKey)")
+                        .font(.subheadline)
                         .multilineTextAlignment(.center)
-                        .position(x:geometry.size.width/2, y:geometry.size.height * 0.3)
-                    VStack(spacing: 45, content: {
-                        Button("Gacha") {
-                            navigationManager.navigate(to: GachaView.self)
+                }
+                .padding(.top, 40)
+                
+                // Navigation Buttons Section
+                VStack(spacing: 20) {
+                    Button(action: {
+                        navigationManager.navigate(to: FlashcardView.self)
+                    }) {
+                        ZStack {
+                            Image("home-studyImg")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity)
+                                .overlay(
+                                    Color.black.opacity(0.4)
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 50))
+                            Text("Study")
+                                .font(.title)
+                                .foregroundStyle(.white)
+                                .bold()
                         }
-                        .buttonStyle(.borderedProminent)
-                        Button("Profile") {
+                    }
+                    
+                    HStack(spacing: 10) {
+                        Button(action: {
+                            navigationManager.navigate(to: GachaView.self);
+                        }) {
+                            ZStack {
+                                Image("home-gachaImg")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(
+                                        Color.black.opacity(0.4)
+                                    )
+                                    .clipShape(RoundedRectangle(cornerRadius: 50))
+                                Text("Gacha")
+                                    .font(.title)
+                                    .foregroundStyle(.white)
+                                    .bold()
+                            }
+                        }
+                        Button(action: {
                             navigationManager.navigate(to: ProfileView.self)
+                        }) {
+                            ZStack {
+                                Image("home-profileImg")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(
+                                        Color.black.opacity(0.4)
+                                    )
+                                    .clipShape(RoundedRectangle(cornerRadius: 50))
+                                Text("Profile")
+                                    .font(.title)
+                                    .foregroundStyle(.white)
+                                    .bold()
+                            }
                         }
-                        .buttonStyle(.borderedProminent)
-                        Button("Flashcards") {
-                            navigationManager.navigate(to: FlashcardView.self)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        Button("Reset User (Temporary)") {
-                            viewModel.resetUser();
-                            navigationManager.navigate(to: FirstTimeSetupView.self)
-                        }
-                        .buttonStyle(.borderedProminent)
-                    })
-                    .position(x:geometry.size.width/2, y:geometry.size.height * 0.6)
+                    }
+                    
+                    Button(action: {
+                        viewModel.resetUser()
+                        navigationManager.navigate(to: FirstTimeSetupView.self)
+                    }) {
+                        NavigationButtonLabel(icon: "exclamationmark.triangle.fill", title: "Reset User (Temporary)")
+                    }
                 }
-                .onAppear() {
-                    viewModel.refresh(modelContext: modelContext)
-                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 30)
+                .background(Color.black.opacity(0.1))
+                .cornerRadius(15)
+                
+                Spacer()
             }
         }
+        .onAppear {
+            viewModel.refresh(modelContext: modelContext)
+        }
+    }
 }
 
 #Preview {

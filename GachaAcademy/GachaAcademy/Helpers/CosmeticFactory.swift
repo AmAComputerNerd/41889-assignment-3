@@ -53,9 +53,6 @@ class CosmeticFactory {
         { Cosmetic("Mega Kermit", .Avatar, .Legendary, "MegaKermit") },
     ];
     
-    // Cosmetic("Gojo", .Avatar, .Legendary, "Gojo")
-    // Cosmetic("Miku", .Avatar, .Legendary, "Miku")
-    
     static func createRandomThreeStar() -> Cosmetic {
         return threeStars.randomElement()!();
     }

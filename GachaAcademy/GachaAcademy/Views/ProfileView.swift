@@ -175,7 +175,7 @@ struct CosmeticsSelectorView: View {
                                 .sorted(by: { $0.rarity < $1.rarity }),
                         selectedCosmetic: selectedBinding
                     )
-                    .tabItem { Text(type.rawValue).bold() }
+                    .tabItem { Text(type.rawValue) }
                 }
             }
             .navigationTitle("Select Cosmetics")
