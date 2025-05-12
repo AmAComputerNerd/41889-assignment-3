@@ -11,7 +11,7 @@ enum Rarity : String, Comparable
 {
     case Common = "3STAR"
     case Epic = "4STAR"
-    case Legendary = "5Star"
+    case Legendary = "5STAR"
     
     var rank: Int {
         switch self {

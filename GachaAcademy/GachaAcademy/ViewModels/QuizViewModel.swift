@@ -58,7 +58,11 @@ class QuizViewModel: ObservableObject {
     func answerQuestion(answer: String, onUpdate: @escaping (Flashcard) -> Void) {
         selectedAnswer = answer
         if correctAnswer == answer {
-            user?.ticketCount += 1
+            guard user == nil else
+            {
+                _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 10)
+                return;
+            }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

@@ -139,16 +139,7 @@ class GachaViewModel : ObservableObject
             current5StarRate += (1.0 - current5StarRate) / (90.0 - Double(pityCount));
         }
     }
-    
-    func giveTicket()
-    {
-        guard user == nil else
-        {
-            _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 10)
-            return;
-        }
-    }
-    
+
     func generateFiveStar() -> Cosmetic
     {
         if !isGuaranteed
