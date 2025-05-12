@@ -39,7 +39,7 @@ struct HomeView: View {
                             navigationManager.navigate(to: FlashcardView.self)
                         }
                         .buttonStyle(.borderedProminent)
-                        Button("Reset User") {
+                        Button("Reset User (Temporary)") {
                             viewModel.resetUser();
                             navigationManager.navigate(to: FirstTimeSetupView.self)
                         }
