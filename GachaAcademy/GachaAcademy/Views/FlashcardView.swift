@@ -47,7 +47,9 @@ struct FlashcardView: View {
                         }
                         .onTapGesture {
                             withAnimation {
-                                  self.showBack.toggle()
+                                if (canFlip) {
+                                    self.showBack.toggle()
+                                }
                             }
                         }
                     }
@@ -85,6 +87,9 @@ struct FlashcardView: View {
                 })
                 .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                 .position(CGPoint(x: geometry.size.width/2, y: geometry.size.height/2))
+        }
+        .onAppear {
+            viewModel.refresh(modelContext: modelContext)
         }
     }
 }
