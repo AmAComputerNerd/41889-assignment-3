@@ -52,7 +52,7 @@ class FlashcardManager {
     
     static func flashcardInfoDtoToFlashcard(flashcardInfoDTO: FlashcardInfoDTO) async throws -> Flashcard {
         let flashcardDTO = try await retrieveFlashcard(cardID: flashcardInfoDTO.cardID);
-        return Flashcard(front: flashcardDTO.front, back: flashcardDTO.back);
+        return Flashcard(front: flashcardDTO.front.htmlStripped, back: flashcardDTO.back.htmlStripped);
     }
     
     static func getFlashcardsFromDTOs(folderDTOs: [FolderDTO], folderName: String? = nil) async throws -> FlashcardFolder {
@@ -80,4 +80,10 @@ class FlashcardManager {
 enum FlashcardManagerError: Error {
     case unableToRetrieveAllFlashcardInfo(message: String)
     case unableToRetrieveFlashcard(message: String)
+}
+
+extension String {
+    var htmlStripped: String {
+        return self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+    }
 }

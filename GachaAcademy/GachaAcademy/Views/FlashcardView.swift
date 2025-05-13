@@ -37,8 +37,8 @@ struct FlashcardView: View {
                                     .resizable()
                                     .scaledToFill()
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    .scaleEffect(x: -1)
                                 Text(flashcard.back)
+                                    .scaleEffect(x: -1)
                             }
                             .opacity( showBack ? 1 : 0)
                             .rotation3DEffect(Angle.degrees(showBack ? 180 : 360), axis: (0,1,0))
