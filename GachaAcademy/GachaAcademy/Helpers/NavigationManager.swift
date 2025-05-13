@@ -23,7 +23,6 @@ class NavigationManager: ObservableObject {
         ReflectionHelper.getClassNameFromType(GachaView.self): { AnyView(GachaView()) },
         ReflectionHelper.getClassNameFromType(ProfileView.self): { AnyView(ProfileView()) },
         ReflectionHelper.getClassNameFromType(SetSelectionView.self): { AnyView(SetSelectionView()) }
-        ReflectionHelper.getClassNameFromType(QuizView.self): { AnyView(QuizView()) }
     ];
     
     func navigate(to: Any.Type? = nil, withParams: (() -> AnyView)? = nil, supportsNavigation: Bool = false) {
