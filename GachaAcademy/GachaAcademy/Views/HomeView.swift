@@ -7,27 +7,6 @@
 
 import SwiftUI
 
-// A custom view to style navigation buttons with a system image icon and title.
-struct NavigationButtonLabel: View {
-    let icon: String
-    let title: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .font(.title2)
-            Text(title)
-                .fontWeight(.medium)
-                .font(.title3)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.blue)
-        .foregroundColor(.white)
-        .cornerRadius(10)
-    }
-}
-
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var navigationManager: NavigationManager
@@ -35,11 +14,9 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            // The background fills the entire screen.
             BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
             
             VStack(spacing: 30) {
-                // Header Section
                 VStack(spacing: 10) {
                     Text("Home")
                         .font(.largeTitle)
@@ -50,7 +27,6 @@ struct HomeView: View {
                 }
                 .padding(.top, 40)
                 
-                // Navigation Buttons Section
                 VStack(spacing: 20) {
                     Button(action: {
                         navigationManager.navigate(to: SetSelectionView.self)
@@ -108,13 +84,6 @@ struct HomeView: View {
                                     .bold()
                             }
                         }
-                    }
-                    
-                    Button(action: {
-                        viewModel.resetUser()
-                        navigationManager.navigate(to: FirstTimeSetupView.self)
-                    }) {
-                        NavigationButtonLabel(icon: "exclamationmark.triangle.fill", title: "Reset User (Temporary)")
                     }
                 }
                 .padding(.horizontal, 20)

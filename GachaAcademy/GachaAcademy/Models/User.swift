@@ -25,7 +25,6 @@ class User: Identifiable {
     var backgroundSpriteName: String? {
         appliedCosmetics.first(where: { $0.type == CosmeticType.Background })?.spriteName;
     }
-    // TODO: Implement Flashcard sprites when Flashcards are successfully implemented.
     var flashcardBackgroundSpriteName: String? {
         appliedCosmetics.first(where: { $0.type == CosmeticType.FlashcardBackground })?.spriteName;
     }
