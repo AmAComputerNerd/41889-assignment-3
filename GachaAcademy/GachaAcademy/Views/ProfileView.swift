@@ -278,46 +278,6 @@ struct CosmeticsCategoryView: View {
     }
 }
 
-//struct ImportFlashcardsView: View {
-//    @StateObject var viewModel: ProfileViewModel;
-//    @State private var flashcardURL: String = "";
-//    @Environment(\.dismiss) var dismiss;
-//    
-//    var body: some View {
-//        NavigationView {
-//            Form {
-//                Section(header: Text("Flashcard Set URL")) {
-//                    TextField("Enter URL", text: $flashcardURL)
-//                        .keyboardType(.URL)
-//                        .textInputAutocapitalization(.never)
-//                        .autocorrectionDisabled()
-//                }
-//                Section {
-//                    Button("Import (PLS EDIT)") {
-//                        let result = viewModel.importFlashcardSet(from: flashcardURL);
-//                        if result {
-//                            dismiss()
-//                        }
-//                    }
-//                    .frame(maxWidth: .infinity)
-//                    if viewModel.validationErrorMessage != nil {
-//                        Text("\(viewModel.validationErrorMessage!)")
-//                            .foregroundStyle(.red)
-//                    }
-//                }
-//            }
-//            .navigationTitle("Import Flashcards")
-//            .toolbar {
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Button("Cancel") {
-//                        dismiss();
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 #Preview {
     ProfileView()
         .environmentObject(NavigationManager())

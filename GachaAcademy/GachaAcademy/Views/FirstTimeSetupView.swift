@@ -45,10 +45,6 @@ struct FirstTimeSetupView: View {
                     viewModel.setupNewUser();
                 }
                 .buttonStyle(.borderedProminent)
-                Button("Reset (Temporary))") {
-                    viewModel.resetUser();
-                }
-                .buttonStyle(.borderedProminent)
             }
         }
         .onAppear() {
@@ -56,7 +52,7 @@ struct FirstTimeSetupView: View {
         }
         .onChange(of: viewModel.isSetupRequired) {
             if !viewModel.isSetupRequired {
-                navigationManager.navigate(to: HomeView.self, supportsNavigation: true);
+                navigationManager.navigate(to: HomeView.self);
             }
         }
         .padding()

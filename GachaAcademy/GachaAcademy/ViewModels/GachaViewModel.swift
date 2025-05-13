@@ -11,7 +11,6 @@ import SwiftData
 
 class GachaViewModel : ObservableObject
 {
-    // TODO: Add pulled cosmetics to the list of Cosmetics with DataHelper. These will be used as the player's "available" cosmetics which determines which ones they can apply.
     @AppStorage("Pity") var pityCount : Int = 0;
     @AppStorage("5StarRate") var current5StarRate : Double = 0.006;
     @AppStorage("4StarRate") var current4StarRate : Double = 0.051;
