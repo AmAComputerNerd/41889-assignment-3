@@ -14,7 +14,6 @@ struct ProfileView: View {
     
     @State private var showingUpdateAPIKey = false;
     @State private var showingCosmeticsSelector = false;
-    @State private var showingImportFlashcard = false;
     
     var body: some View {
         ZStack {
@@ -43,8 +42,9 @@ struct ProfileView: View {
                     .font(.title)
                 
                 VStack(spacing: 10) {
-                    Text("API Key: \(viewModel.user?.apiKey ?? "Not set")");
-                    Button("Update API Key") {
+                    Text("API Token: \(viewModel.user?.apiToken ?? "Not set")");
+                    Button("Update API Token") {
+                        viewModel.user?.apiToken = "";
                         showingUpdateAPIKey = true;
                     }
                 }
@@ -69,16 +69,41 @@ struct ProfileView: View {
                         .opacity(0.5)
                 )
                 
-                Button("Import Flashcard Set") {
-                    showingImportFlashcard = true;
+                VStack {
+                    Button("Update Flashcards") {
+                        Task {
+                            let result = await viewModel.updateFlashcards()
+                            if (result) {
+                                viewModel.validationMessage = "Flashcards Updated";
+                                viewModel.apiKeyIsValid = true;
+                            }
+                            else {
+                                viewModel.validationMessage = "Failed To Get Flashcards. Is your API token valid?";
+                                viewModel.apiKeyIsValid = false;
+                            }
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    
+                    if viewModel.validationMessage != nil {
+                        let success = viewModel.apiKeyIsValid
+                        Text("\(viewModel.validationMessage!)")
+                            .foregroundStyle(success ? .green : .red)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false , vertical: true)
+                    }
+                    
+                    Button("View Saved Flashcards") {
+                        navigationManager.navigate(to: SetSelectionView.self);
+                    }
+                    .buttonStyle(.bordered)
                 }
-                .buttonStyle(.bordered)
-                
-                Button("View Saved Flashcards") {
-                    // Temp - update to navigate to Flashcards view later.
-                    navigationManager.navigate(to: GachaView.self);
-                }
-                .buttonStyle(.bordered)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(UIColor.secondarySystemBackground))
+                        .opacity(0.5)
+                )
                 
                 Button(action: {
                     navigationManager.navigate(to: HomeView.self);
@@ -100,9 +125,6 @@ struct ProfileView: View {
             .sheet(isPresented: $showingCosmeticsSelector) {
                 CosmeticsSelectorView(viewModel: viewModel)
             }
-            .sheet(isPresented: $showingImportFlashcard) {
-                ImportFlashcardsView(viewModel: viewModel)
-            }
             .onAppear() {
                 viewModel.refresh(modelContext: modelContext)
             }
@@ -112,26 +134,33 @@ struct ProfileView: View {
 
 struct UpdateAPIKeyView: View {
     @StateObject var viewModel: ProfileViewModel;
-    @State private var newAPIKey: String = "";
+    @State private var newAPIToken: String = "";
     @Environment(\.dismiss) var dismiss;
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Enter New API Key")) {
-                    TextField("API Key", text: $newAPIKey)
+                Section(header: Text("Enter New API Token")) {
+                    TextField("API Token", text: $newAPIToken)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                 }
                 Section {
-                    Button("Test Connection (PLS EDIT)") {
-                        // TODO: Test API connection and update validation field.
-                        viewModel.validationErrorMessage = "Failed to hit the API - is your key valid?"
-                        viewModel.apiKeyIsValid = false;
+                    Button("Test Connection") {
+                        Task {
+                            if (await HTTPRequestHelper.testJWT(jwt: newAPIToken)) {
+                                viewModel.validationMessage = "Connection Successful";
+                                viewModel.apiKeyIsValid = true;
+                            }
+                            else {
+                                viewModel.validationMessage = "Failed To Connect. Is your token valid?";
+                                viewModel.apiKeyIsValid = false;
+                            }
+                        }
                     }
-                    if viewModel.validationErrorMessage != nil {
+                    if viewModel.validationMessage != nil {
                         let success = viewModel.apiKeyIsValid
-                        Text("\(viewModel.validationErrorMessage!)")
+                        Text("\(viewModel.validationMessage!)")
                             .foregroundStyle(success ? .green : .red)
                     }
                 }
@@ -145,11 +174,14 @@ struct UpdateAPIKeyView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
-                        viewModel.updateAPIKey(newAPIKey)
+                        viewModel.updateAPIKey(newAPIToken)
                         dismiss()
                     }
                 }
             }
+        }
+        .onAppear() {
+            newAPIToken = viewModel.user?.apiToken ?? ""
         }
     }
 }
@@ -247,45 +279,45 @@ struct CosmeticsCategoryView: View {
     }
 }
 
-struct ImportFlashcardsView: View {
-    @StateObject var viewModel: ProfileViewModel;
-    @State private var flashcardURL: String = "";
-    @Environment(\.dismiss) var dismiss;
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Flashcard Set URL")) {
-                    TextField("Enter URL", text: $flashcardURL)
-                        .keyboardType(.URL)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                }
-                Section {
-                    Button("Import (PLS EDIT)") {
-                        let result = viewModel.importFlashcardSet(from: flashcardURL);
-                        if result {
-                            dismiss()
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    if viewModel.validationErrorMessage != nil {
-                        Text("\(viewModel.validationErrorMessage!)")
-                            .foregroundStyle(.red)
-                    }
-                }
-            }
-            .navigationTitle("Import Flashcards")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
-                        dismiss();
-                    }
-                }
-            }
-        }
-    }
-}
+//struct ImportFlashcardsView: View {
+//    @StateObject var viewModel: ProfileViewModel;
+//    @State private var flashcardURL: String = "";
+//    @Environment(\.dismiss) var dismiss;
+//    
+//    var body: some View {
+//        NavigationView {
+//            Form {
+//                Section(header: Text("Flashcard Set URL")) {
+//                    TextField("Enter URL", text: $flashcardURL)
+//                        .keyboardType(.URL)
+//                        .textInputAutocapitalization(.never)
+//                        .autocorrectionDisabled()
+//                }
+//                Section {
+//                    Button("Import (PLS EDIT)") {
+//                        let result = viewModel.importFlashcardSet(from: flashcardURL);
+//                        if result {
+//                            dismiss()
+//                        }
+//                    }
+//                    .frame(maxWidth: .infinity)
+//                    if viewModel.validationErrorMessage != nil {
+//                        Text("\(viewModel.validationErrorMessage!)")
+//                            .foregroundStyle(.red)
+//                    }
+//                }
+//            }
+//            .navigationTitle("Import Flashcards")
+//            .toolbar {
+//                ToolbarItem(placement: .topBarLeading) {
+//                    Button("Cancel") {
+//                        dismiss();
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 #Preview {
     ProfileView()

@@ -47,7 +47,7 @@ class DataHelper: ObservableObject {
         guard let existingUser = self.fetchUser() else { return false; }
         
         if let name = name { existingUser.name = name }
-        if let apiKey = apiKey { existingUser.apiKey = apiKey }
+        if let apiKey = apiKey { existingUser.apiToken = apiKey }
         if let ticketCount = ticketCount { existingUser.ticketCount = ticketCount }
         if let appliedCosmetics = appliedCosmetics { existingUser.appliedCosmetics = appliedCosmetics }
         
@@ -65,7 +65,7 @@ class DataHelper: ObservableObject {
         guard let existingUser = self.fetchUser() else { return false; }
         
         do {
-            existingUser.flashcards = try await FlashcardManager.getAllFlashcards(jwt: existingUser.apiKey);
+            existingUser.flashcards = try await FlashcardManager.getAllFlashcards(jwt: existingUser.apiToken);
         }
         catch {
             return false;

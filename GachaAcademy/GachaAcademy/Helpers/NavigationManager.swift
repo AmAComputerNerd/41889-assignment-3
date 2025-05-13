@@ -22,6 +22,7 @@ class NavigationManager: ObservableObject {
         ReflectionHelper.getClassNameFromType(HomeView.self): { AnyView(HomeView()) },
         ReflectionHelper.getClassNameFromType(GachaView.self): { AnyView(GachaView()) },
         ReflectionHelper.getClassNameFromType(ProfileView.self): { AnyView(ProfileView()) },
+        ReflectionHelper.getClassNameFromType(SetSelectionView.self): { AnyView(SetSelectionView()) }
         ReflectionHelper.getClassNameFromType(QuizView.self): { AnyView(QuizView()) }
     ];
     
