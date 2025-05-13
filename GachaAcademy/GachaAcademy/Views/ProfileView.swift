@@ -246,7 +246,7 @@ struct CosmeticsCategoryView: View {
                     VStack(alignment: .leading) {
                         Text(cosmetic.name)
                             .font(.headline)
-                        Text("Rarity: \(cosmetic.rarity.rawValue)")
+                        Text("Rarity: \(itemRarityText(rarity: cosmetic.rarity))")
                             .font(.headline)
                     }
                     
@@ -265,6 +265,17 @@ struct CosmeticsCategoryView: View {
         }
         .listStyle(InsetGroupedListStyle())
         .navigationTitle(type.rawValue)
+    }
+    
+    func itemRarityText(rarity: Rarity) -> String {
+        switch rarity {
+            case .Common:
+                return "⭐⭐⭐";
+            case .Epic:
+                return "⭐⭐⭐⭐";
+            case .Legendary:
+                return "⭐⭐⭐⭐⭐";
+        }
     }
 }
 

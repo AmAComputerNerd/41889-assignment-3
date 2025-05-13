@@ -12,77 +12,84 @@ struct FlashcardView: View {
     @Environment(\.modelContext) private var modelContext;
     @StateObject var viewModel: FlashcardViewModel = FlashcardViewModel();
     @EnvironmentObject private var navigationManager: NavigationManager;
+    @State var showBack: Bool = false;
+    @State var canFlip: Bool;
+    @Binding var flashcard: Flashcard;
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack
-            {
-                BackgroundView(spriteName: viewModel.user?.backgroundSpriteName)
-                Text("Flashcards")
-                    .font(.title)
-                    .foregroundStyle(.black)
-                    .position(x:geometry.size.width/2, y:geometry.size.height * 0.1)
-                Button(action: {
-                    navigationManager.navigate(to: ProfileView.self);
-                }) {
-                    if let avatar = viewModel.user?.avatarSpriteName {
-                        Image(avatar)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 45, height: 45)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.secondary, lineWidth: 2))
-                    } else {
-                        Circle()
-                            .fill(Color.gray)
-                            .frame(width: 45, height: 45)
-                    }
-                }.position(CGPoint(x: geometry.size.width*0.9, y: geometry.size.height*0.1))
-                VStack
-                {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.white)
-                        .overlay(content: {
-                            if let card = viewModel.user?.flashcardBackgroundSpriteName {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.white)
+                .overlay(content: {
+                    if let card = viewModel.user?.flashcardBackgroundSpriteName {
+                        ZStack {
+                            ZStack {
                                 Image(card)
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
+                                Text(flashcard.front)
                             }
-                            else
-                            {
+                            .opacity(showBack ? 0 : 1)
+                            .rotation3DEffect(Angle.degrees(showBack ? 180 : 360), axis: (0,1,0))
+                            ZStack {
+                                Image(card)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    .scaleEffect(x: -1)
+                                Text(flashcard.back)
+                            }
+                            .opacity( showBack ? 1 : 0)
+                            .rotation3DEffect(Angle.degrees(showBack ? 180 : 360), axis: (0,1,0))
+                        }
+                        .onTapGesture {
+                            withAnimation {
+                                if (canFlip) {
+                                    self.showBack.toggle()
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ZStack {
+                            ZStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(.brown)
                                     .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                                     .opacity(0.4)
+                                Text(flashcard.front)
                             }
-                            Text("Front")
-                        })
-                        .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
-                        .position(CGPoint(x: geometry.size.width/2, y: geometry.size.height/2))
-                    Button(action: {
-                        navigationManager.navigate(to: HomeView.self);
-                    })
-                    {
-                        Image("Home")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 45, height: 45)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .opacity(showBack ? 0 : 1)
+                            .rotation3DEffect(Angle.degrees(showBack ? 180 : 360), axis: (0,1,0))
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(.brown)
+                                    .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
+                                    .opacity(0.4)
+                                Text(flashcard.back)
+                                    .scaleEffect(x: -1)
+                            }
+                            .opacity(showBack ? 1 : 0)
+                            .rotation3DEffect(Angle.degrees(showBack ? 180 : 360), axis: (0,1,0))
+                        }
+                        .onTapGesture {
+                            withAnimation {
+                                if (canFlip) {
+                                    self.showBack.toggle()
+                                }
+                            }
+                        }
                     }
-                }
-            }
+                })
+                .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
+                .position(CGPoint(x: geometry.size.width/2, y: geometry.size.height/2))
         }
         .onAppear {
             viewModel.refresh(modelContext: modelContext)
-            viewModel.Flashcards.append(Flashcard(front: "front", back: "back"))
         }
     }
-}
-
-#Preview {
-    FlashcardView()
-        .environmentObject(NavigationManager())
-        .modelContainer(for: [User.self, Cosmetic.self, FlashcardFolder.self, FlashcardSet.self, Flashcard.self])
 }

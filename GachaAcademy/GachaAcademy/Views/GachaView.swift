@@ -67,12 +67,6 @@ struct GachaView : View {
                             .font(.caption)
                         Text("Guaranteed: \(viewModel.getIsGuaranteed())")
                             .font(.caption)
-                        Button(action: {
-                            viewModel.giveTicket()
-                        }) {
-                            Text("Give Ticket")
-                        }
-                        .padding()
                     }
                     .position(x: geometry.size.width * 0.175, y: geometry.size.height * 0.50)
                     RoundedRectangle(cornerRadius: 25)
