@@ -44,7 +44,6 @@ struct ProfileView: View {
                 VStack(spacing: 10) {
                     Text("API Token: \(viewModel.user?.apiToken ?? "Not set")");
                     Button("Update API Token") {
-                        viewModel.user?.apiToken = "";
                         showingUpdateAPIKey = true;
                     }
                 }
@@ -181,7 +180,7 @@ struct UpdateAPIKeyView: View {
             }
         }
         .onAppear() {
-            newAPIToken = viewModel.user?.apiToken ?? ""
+            newAPIToken = viewModel.user?.apiToken ?? "";
         }
     }
 }

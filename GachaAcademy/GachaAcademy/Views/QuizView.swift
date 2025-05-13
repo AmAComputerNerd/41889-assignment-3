@@ -9,11 +9,15 @@ import SwiftUI
 
 struct QuizView: View {
     @Environment(\.modelContext) private var modelContext
-    @StateObject var viewModel: QuizViewModel = QuizViewModel()
+    @StateObject var viewModel: QuizViewModel;
     @EnvironmentObject private var navigationManager: NavigationManager
 
     // Local state to mirror the current flashcard
     @State private var currentFlashcardWrapper: Flashcard = Flashcard(front: "", back: "")
+    
+    init(flashcardSet: FlashcardSet) {
+        self._viewModel = StateObject(wrappedValue: QuizViewModel(flashcards: flashcardSet.flashcards));
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -55,9 +59,10 @@ struct QuizView: View {
                                             Text(viewModel.currentAnswers[0])
                                                 .padding(.vertical, 10)
                                         }
-                                        .fixedSize(horizontal: false, vertical: true)
                                     }
                                     .disabled(viewModel.selectedAnswer != nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .buttonStyle(.bordered)
                                 
                                 Button(action: {
                                     viewModel.answerQuestion(answer: viewModel.currentAnswers[1]) { updated in
@@ -70,9 +75,10 @@ struct QuizView: View {
                                             Text(viewModel.currentAnswers[1])
                                                 .padding(.vertical, 10)
                                         }
-                                        .fixedSize(horizontal: false, vertical: true)
                                     }
                                     .disabled(viewModel.selectedAnswer != nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .buttonStyle(.bordered)
                             }
                             GridRow {
                                 Button(action: {
@@ -86,9 +92,10 @@ struct QuizView: View {
                                             Text(viewModel.currentAnswers[2])
                                                 .padding(.vertical, 10)
                                         }
-                                        .fixedSize(horizontal: false, vertical: true)
                                     }
                                     .disabled(viewModel.selectedAnswer != nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .buttonStyle(.bordered)
                                 
                                 Button(action: {
                                     viewModel.answerQuestion(answer: viewModel.currentAnswers[3]) { updated in
@@ -102,9 +109,11 @@ struct QuizView: View {
                                                 .padding(.vertical, 10)
                                         }
                                     }
+                                    .disabled(viewModel.selectedAnswer != nil)
                                     .fixedSize(horizontal: false, vertical: true)
+                                    .buttonStyle(.bordered)
                             }
-                            .disabled(viewModel.selectedAnswer != nil)
+                            
                         }
                         
                         Button(action: {
@@ -144,8 +153,4 @@ struct QuizView: View {
         }
     }
 
-}
-
-#Preview {
-    QuizView()
 }
