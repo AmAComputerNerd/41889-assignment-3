@@ -53,7 +53,7 @@ struct QuizView: View {
                                 .fill(.white)
                                 .overlay(
                                     VStack(spacing: 10) {
-                                        Text("Game Complete!")
+                                        Text("Quiz Complete!")
                                             .font(.title)
                                         
                                         Text("You scored \(viewModel.score) out of \(viewModel.initialCardCount)")
