@@ -17,7 +17,7 @@ class FlashcardManager {
             throw FlashcardManagerError.unableToRetrieveAllFlashcardInfo(message: error.localizedDescription)
         }
         
-        if (response.statusCode % 100 != 2) {
+        if (response.statusCode < 200 || response.statusCode >= 300) {
             throw FlashcardManagerError.unableToRetrieveAllFlashcardInfo(message: "API response is not successful")
         }
         
@@ -37,12 +37,13 @@ class FlashcardManager {
             throw FlashcardManagerError.unableToRetrieveFlashcard(message: "Card ID: \(cardID), Error: \(error.localizedDescription)");
         }
         
-        if (response.statusCode % 100 != 2) {
+        if (response.statusCode < 200 || response.statusCode >= 300) {
             throw FlashcardManagerError.unableToRetrieveFlashcard(message: "API response is not successful");
         }
         
         do {
-            return try JSONDecoder().decode(FlashcardDTO.self, from: data);
+            let response = try JSONDecoder().decode(FlashcardResponseDTO.self, from: data);
+            return response.flashcardDTO;
         }
         catch {
             throw FlashcardManagerError.unableToRetrieveFlashcard(message: "Retrieved data is invalid");
