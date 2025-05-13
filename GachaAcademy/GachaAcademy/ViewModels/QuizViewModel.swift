@@ -16,12 +16,15 @@ class QuizViewModel: ObservableObject {
     @Published var currentFlashcard: Flashcard? = nil
     @Published var currentAnswers: [String] = []
     @Published var selectedAnswer: String? = nil
+    @Published var isGameOver: Bool = false;
+    @Published var score: Int = 0;
+    @Published var initialCardCount: Int = 0;
     var possibleAnswers: [String] = []
     var correctAnswer: String? = ""
     
     init(flashcards: [Flashcard]) {
         self.flashcards = flashcards;
-        
+        self.initialCardCount = flashcards.count
         for flashcard in flashcards {
             possibleAnswers.append(flashcard.back);
         }
@@ -39,7 +42,15 @@ class QuizViewModel: ObservableObject {
     }
     
     func setupQuestion() {
+        if flashcards.isEmpty
+        {
+            isGameOver = true;
+            return;
+        }
+        
         currentFlashcard = flashcards.randomElement()!
+        flashcards.removeAll { $0 == currentFlashcard }
+
         correctAnswer = currentFlashcard?.back
 
         var incorrectAnswers = possibleAnswers.filter { $0 != currentFlashcard!.back }.shuffled()
@@ -59,6 +70,7 @@ class QuizViewModel: ObservableObject {
         selectedAnswer = answer
         
         if correctAnswer == answer && user != nil {
+            score += 1
             _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 1)
             delay = 1.0
         }
