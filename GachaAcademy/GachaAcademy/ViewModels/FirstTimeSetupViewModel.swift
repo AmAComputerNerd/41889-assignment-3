@@ -37,15 +37,4 @@ class FirstTimeSetupViewModel: ObservableObject {
         }
         self.validationErrorMessage = "Failed to setup new user as one already exists! Please check code logic.";
     }
-    
-    func resetUser() {
-        // DEBUG
-        let resultUser = self.dataHelper?.clearUser();
-        let resultCosmetics = self.dataHelper?.clearCosmetics();
-        if resultUser == true && resultCosmetics == true {
-            self.validationErrorMessage = "DEBUG > Cleared user and cosmetics successfully.";
-        } else {
-            self.validationErrorMessage = "DEBUG > Failed to clear user / cosmetics - didn't exist, random error or self.dataHelper wasn't populated."
-        }
-    }
 }

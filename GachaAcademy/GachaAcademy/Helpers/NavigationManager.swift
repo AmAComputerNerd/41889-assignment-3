@@ -13,7 +13,6 @@ import SwiftUI
 
 class NavigationManager: ObservableObject {
     @Published var currentView: AnyView = AnyView(FirstTimeSetupView()); // The instance to the View in which the nav manager is pointing to.
-    @Published var supportsNavigation: Bool = false; // Whether this View should use a NavigationView UI element to handle in-view navigation (shows a back button in the top left). From there, NavigationLinks will handle that kind of navigation and the NavigationManager is used to reset or change the navigation stack to a View outside of that tree.
     
     // ViewFactories for views with a default constructor.
     // When making a new View you need to navigate to that DOESN'T need some kind of info passed to it, add it below:
@@ -25,8 +24,7 @@ class NavigationManager: ObservableObject {
         ReflectionHelper.getClassNameFromType(SetSelectionView.self): { AnyView(SetSelectionView()) }
     ];
     
-    func navigate(to: Any.Type? = nil, withParams: (() -> AnyView)? = nil, supportsNavigation: Bool = false) {
-        self.supportsNavigation = supportsNavigation;
+    func navigate(to: Any.Type? = nil, withParams: (() -> AnyView)? = nil) {
         // If Navigation is provided with a closure (complex navigation using withParams):
         if let factory = withParams {
             self.currentView = factory();
