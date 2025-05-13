@@ -15,7 +15,7 @@ struct FolderNavigationView: View {
 
             Section(header: Text("Flashcard Sets")) {
                 ForEach(folder.flashcardSets) { set in
-                    NavigationLink(destination: GamePreviewView(flashcardSet: set)) {
+                    NavigationLink(destination: QuizPreviewView(flashcardSet: set)) {
                         Label(set.name, systemImage: "document.on.document")
                     }
                 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct GamePreviewView: View {
+struct QuizPreviewView: View {
     @EnvironmentObject private var navigationManager: NavigationManager
     @ObservedObject var flashcardSet: FlashcardSet;
     
@@ -29,7 +29,7 @@ struct GamePreviewView: View {
                 Button(action: {
                     navigationManager.navigate(to: QuizView.self, withParams: { AnyView(QuizView(flashcardSet: flashcardSet)) })
                 }) {
-                    Text("Start Game")
+                    Text("Start Quiz")
                 }
                 .disabled(flashcardSet.flashcards.count < 4)
                 .buttonStyle(.borderedProminent)
