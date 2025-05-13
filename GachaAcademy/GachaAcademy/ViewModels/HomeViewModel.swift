@@ -24,7 +24,7 @@ class HomeViewModel: ObservableObject {
         let user = dataHelper!.fetchUser();
         self.user = user;
         self.userName = user?.name ?? "Not logged in";
-        self.apiKey = user?.apiKey ?? "";
+        self.apiKey = user?.apiToken ?? "";
     }
     
     func resetUser() {

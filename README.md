@@ -4,7 +4,7 @@ Assignment 3 for 41889 Application Development in the iOS Environment
 ## Collaborators
 - AmAComputerNerd: Jonathon Thomson (25488154)
 - Grimmace19: Kyan Grimm (25482187)
-- TakedownChain23: Isaac Thomas (StudentNoHere)
+- TakedownChain23: Isaac Thomas (25341708)
 - treggosaurus: Tristan Huang (25322025)
 
 ## Developer Guide

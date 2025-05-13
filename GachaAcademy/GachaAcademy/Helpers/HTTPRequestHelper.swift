@@ -32,6 +32,16 @@ class HTTPRequestHelper {
         
         throw ApiRequestError.invalidResponse
     }
+    
+    static func testJWT(jwt: String) async -> Bool {
+        do {
+            let (_, response) = try await makePostRequest(endpoint: "get-all-cards", body: ["jwtToken": jwt])
+            return response.statusCode >= 200 && response.statusCode < 300;
+        }
+        catch {
+            return false;
+        }
+    }
 }
 
 enum ApiRequestError: Error, LocalizedError {

@@ -12,7 +12,7 @@ import SwiftData
 class User: Identifiable {
     var id = UUID();
     var name: String;
-    var apiKey: String;
+    var apiToken: String;
     var ticketCount: Int;
     @Relationship var flashcards: FlashcardFolder;
     @Relationship var starredCollections: [FlashcardSet] = [];
@@ -32,7 +32,7 @@ class User: Identifiable {
     
     init(name: String, apiKey: String) {
         self.name = name;
-        self.apiKey = apiKey;
+        self.apiToken = apiKey;
         self.ticketCount = 30;
         self.flashcards = FlashcardFolder();
     }

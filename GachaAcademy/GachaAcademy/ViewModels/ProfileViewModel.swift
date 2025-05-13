@@ -11,7 +11,7 @@ import SwiftData
 class ProfileViewModel: ObservableObject {
     @Published var user: User? = nil;
     @Published var availableCosmetics: [Cosmetic] = [];
-    @Published var validationErrorMessage: String? = nil;
+    @Published var validationMessage: String? = nil;
     @Published var apiKeyIsValid: Bool = true;
     private var dataHelper: DataHelper? = nil;
     
@@ -30,7 +30,7 @@ class ProfileViewModel: ObservableObject {
             _ = dataHelper.updateUser(apiKey: newKey);
             self.user = dataHelper.fetchUser();
         }
-        self.validationErrorMessage = nil;
+        self.validationMessage = nil;
     }
     
     func applyCosmetics(_ cosmetics: [Cosmetic]) {
