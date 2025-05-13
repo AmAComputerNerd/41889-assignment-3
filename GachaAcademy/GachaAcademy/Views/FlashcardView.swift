@@ -58,6 +58,8 @@ struct FlashcardView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(.brown)
                                     .opacity(0.4)
+                                    .frame(width: 270, height: 150)
+                                    .scaledToFill()
                                 Text(flashcard.front)
                             }
                             .opacity(showBack ? 0 : 1)
@@ -66,6 +68,8 @@ struct FlashcardView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(.brown)
                                     .opacity(0.4)
+                                    .frame(width: 270, height: 150)
+                                    .scaledToFill()
                                 Text(flashcard.back)
                                     .scaleEffect(x: -1)
                             }

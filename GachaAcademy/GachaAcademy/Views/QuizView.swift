@@ -63,6 +63,7 @@ struct QuizView: View {
                         } else {
                             VStack(spacing: 20) {
                                 FlashcardView(canFlip: false, flashcard: $currentFlashcardWrapper)
+                                    
                                 
                                 if viewModel.currentAnswers.count >= 4 {
                                     VStack(spacing: 10) {
