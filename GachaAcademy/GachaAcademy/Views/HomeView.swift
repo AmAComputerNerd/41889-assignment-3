@@ -47,10 +47,6 @@ struct HomeView: View {
                     
                     Text("Logged in as \(viewModel.userName)")
                         .multilineTextAlignment(.center)
-                    
-                    Text("API Key: \(viewModel.apiKey)")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
                 }
                 .padding(.top, 40)
                 

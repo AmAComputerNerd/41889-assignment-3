@@ -27,7 +27,6 @@ struct FlashcardView: View {
                                 Image(card)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                 Text(flashcard.front)
                             }
@@ -37,7 +36,6 @@ struct FlashcardView: View {
                                 Image(card)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                     .scaleEffect(x: -1)
                                 Text(flashcard.back)
@@ -59,7 +57,6 @@ struct FlashcardView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(.brown)
-                                    .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                                     .opacity(0.4)
                                 Text(flashcard.front)
                             }
@@ -68,7 +65,6 @@ struct FlashcardView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(.brown)
-                                    .frame(width: geometry.size.width * 0.75, height: geometry.size.height * 0.25)
                                     .opacity(0.4)
                                 Text(flashcard.back)
                                     .scaleEffect(x: -1)

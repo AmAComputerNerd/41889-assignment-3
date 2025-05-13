@@ -2,7 +2,7 @@
 //  FlashcardViewModel.swift
 //  GachaAcademy
 //
-//  Created by Kyan Grimm on 12/5/2025.
+//  Created by Tristan Huang on 13/5/2025.
 //
 
 import Foundation
@@ -11,7 +11,7 @@ import SwiftData
 class QuizViewModel: ObservableObject {
     private var dataHelper: DataHelper? = nil
     @Published var user : User? = nil
-    @Published var Flashcards: [Flashcard] = []
+    @Published var flashcards: [Flashcard] = []
     
     @Published var currentFlashcard: Flashcard? = nil
     @Published var currentAnswers: [String] = []
@@ -19,15 +19,14 @@ class QuizViewModel: ObservableObject {
     var possibleAnswers: [String] = []
     var correctAnswer: String? = ""
     
-    init() {
-        Flashcards = [Flashcard(front: "A", back: "A"), Flashcard(front: "B", back: "B"), Flashcard(front: "C", back: "C"), Flashcard(front: "D", back: "D"), Flashcard(front: "E", back: "E"), Flashcard(front: "F", back: "F")]
-        // Replace with the get request
+    init(flashcards: [Flashcard]) {
+        self.flashcards = flashcards;
         
-        for flashcard in Flashcards {
-            possibleAnswers.append(flashcard.back)
+        for flashcard in flashcards {
+            possibleAnswers.append(flashcard.back);
         }
-        possibleAnswers.shuffle()
-        setupQuestion()
+        possibleAnswers.shuffle();
+        setupQuestion();
     }
     
     func refresh(modelContext: ModelContext) {
@@ -40,7 +39,7 @@ class QuizViewModel: ObservableObject {
     }
     
     func setupQuestion() {
-        currentFlashcard = Flashcards.randomElement()!
+        currentFlashcard = flashcards.randomElement()!
         correctAnswer = currentFlashcard?.back
 
         var incorrectAnswers = possibleAnswers.filter { $0 != currentFlashcard!.back }.shuffled()
@@ -56,16 +55,15 @@ class QuizViewModel: ObservableObject {
     }
     
     func answerQuestion(answer: String, onUpdate: @escaping (Flashcard) -> Void) {
+        var delay = 3.0
         selectedAnswer = answer
-        if correctAnswer == answer {
-            guard user == nil else
-            {
-                _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 10)
-                return;
-            }
+        
+        if correctAnswer == answer && user != nil {
+            _ = dataHelper?.updateUser(ticketCount: user!.ticketCount + 1)
+            delay = 1.0
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.setupQuestion()
             self.selectedAnswer = nil
             
